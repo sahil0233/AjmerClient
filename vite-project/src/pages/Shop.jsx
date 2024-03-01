@@ -8,7 +8,7 @@ const Shop = () => {
   return (
     <div>
         <Navbar />
-        <div className='flex flex-col'>
+        <div className='flex flex-col mt-20'>
             <Sidebar />
         </div>
       

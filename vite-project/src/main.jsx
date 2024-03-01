@@ -19,16 +19,16 @@ const router = createBrowserRouter([
     errorElement : <NotFound />
   },
   {
-    path : "/shop/product/:id",
+    path : "/product/:id",
     element : <Product />
+  },
+    {
+    path : "/category/:categoryid",
+    element : <Shop />
   },
   {
     path : "/search",
     element: <Search />
-  },
-  {
-    path : "/shop",
-    element: <Shop />
   },
   {
     path : "/cart",

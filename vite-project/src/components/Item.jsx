@@ -15,11 +15,9 @@ const Item = (props) => {
     },[]);
 
     const getVariationData = async() => {
-        console.log(props.id)
         const docRef = doc(firestore, "variations", props.variationId);
         const docSnap = await getDoc(docRef);
         if(docSnap.exists()){
-            console.log(docSnap.data());
             setVariant(docSnap.data().variants[0]);
             setPrice(docSnap.data().price[0]);
             setDiscounted_price(docSnap.data().discounted_price[0]);
@@ -30,7 +28,7 @@ const Item = (props) => {
     
     <div className="w-full bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
     {variant &&
-        <Link to={`product/${props.id}`}>
+        <Link to={`/product/${props.id}`}>
             <img src={props.image}
                     alt="Product" className="h-64 w-72 object-cover rounded-t-xl" />
             <div className="px-4 py-3">

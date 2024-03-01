@@ -18,7 +18,7 @@ const CartItem = (props) => {
 }
 
   return (
-        <div>
+        <div key={props.id}>
             {product && 
             <div className="justify-between items-center mb-6 rounded-lg border p-6 sm:flex sm:justify-start">
                 <img src={product.image} alt="product-image" className="w-full rounded-lg sm:w-40" />

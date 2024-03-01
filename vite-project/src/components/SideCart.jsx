@@ -72,7 +72,7 @@ const SideCart = (props) => {
                       <div className="mt-8">
                         <div className="flow-root">
                           {cartItems && cartItems.product.map((id) => (
-                            <CartItem productId={id} />
+                            <CartItem key={id} productId={id} />
                           ))}
                         </div>
                       </div>
