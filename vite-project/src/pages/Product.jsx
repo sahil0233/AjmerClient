@@ -91,7 +91,7 @@ const addToCart = async() => {
     <div className='pt-20'>
       <Navbar />
       {product && <>
-        <div className="py-6">
+        <div className="mt-24">
       {/* <!-- Breadcrumbs --> */}
         {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center space-x-2 text-gray-400 text-sm">
@@ -106,7 +106,7 @@ const addToCart = async() => {
         </div> */}
   {/* <!-- ./ Breadcrumbs --> */}
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row -mx-4">
             <div className="md:flex-1 px-4">
               <div x-data="{ image: 1 }">

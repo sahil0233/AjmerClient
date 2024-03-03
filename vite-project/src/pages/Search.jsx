@@ -42,7 +42,7 @@ const Search = () => {
   return (
     <div>
       <Navbar />
-      <div className='m-24'>
+      <div className='mx-24 mt-36 lg:mt-24'>
       <h1 className='flex gap-4'><p className='text-black font-medium text-3xl'>Search results</p> <span className='text-gray-400 font-normal text-lg flex items-end'>Showing {products.length} results for "{searchItem}"</span></h1>
       <section className=" auto-cols-auto col-span-5 w-fit mx-auto grid grid-cols-1 xl:grid-cols-4 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-4 mt-10 mb-5">
                 {products.map((item,index) => (

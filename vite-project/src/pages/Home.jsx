@@ -6,7 +6,9 @@ const Home = () => {
   return (
     <div>
         <Navbar />
+        <div className='mt-40 lg:mt-20'>
         <CategorySlider />
+        </div>
     </div>
   )
 }
