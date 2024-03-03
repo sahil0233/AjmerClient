@@ -26,18 +26,17 @@ const Item = (props) => {
 
   return (
     
-    <div className="w-full bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+    <div className="w-full bg-white border-2 shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
     {variant &&
         <Link to={`/product/${props.id}`}>
-            <img src={props.image}
-                    alt="Product" className="h-64 w-72 object-cover rounded-t-xl" />
+            <img src={props.image} alt="Product" className="h-64 w-72 object-cover rounded-t-xl" />
             <div className="px-4 py-3">
                 <span className="text-gray-400 mr-3 uppercase text-xs">{props.brand}</span>
-                <p className="text-lg font-bold text-black truncate block capitalize">{props.product}</p>
+                <p className="text-lg font-bold text-black truncate block capitalize">{props.title}</p>
                 <div className="flex items-center">
-                    <p className="text-lg font-semibold text-black cursor-auto my-3">₹{discounted_price}</p>
+                    <p className="text-lg font-semibold text-black cursor-auto my-3">₹{localStorage.getItem("userId")!=null?discounted_price:""}</p>
                     <del>
-                        <p className="text-sm text-gray-600 cursor-auto ml-2">₹{price}</p>
+                        <p className="text-sm text-gray-600 cursor-auto ml-2">₹{localStorage.getItem("userId")!=null?price:""}</p>
                     </del>
                     <div className="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                             fill="currentColor" className="bi bi-bag-plus" viewBox="0 0 16 16">

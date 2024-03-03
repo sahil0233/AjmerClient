@@ -26,5 +26,6 @@ export {
     app,
     auth,
     storage,
-    firestore
+    firestore,
+    firebaseConfig
 };

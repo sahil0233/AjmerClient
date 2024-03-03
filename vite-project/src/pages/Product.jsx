@@ -93,7 +93,7 @@ const addToCart = async() => {
       {product && <>
         <div className="py-6">
       {/* <!-- Breadcrumbs --> */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center space-x-2 text-gray-400 text-sm">
             <a href="#" className="hover:underline hover:text-gray-600">Drink</a>
             <span>
@@ -103,7 +103,7 @@ const addToCart = async() => {
             </span>
             <a href="#" className="hover:underline hover:text-gray-600">Coffee</a>
           </div>
-        </div>
+        </div> */}
   {/* <!-- ./ Breadcrumbs --> */}
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
@@ -155,12 +155,12 @@ const addToCart = async() => {
 
               <div className="flex flex-col py-8 space-y-4 border-b">
                 <div className='flex gap-12'>
-                  <p className='text-md h-10 leading-10'>MRP <span className='line-through'>₹{selectedPrice}</span></p>
-                  <p className='text-md h-10 leading-10'>Dmart <span className='font-bold text-2xl'>₹{selectedDiscounted_price}</span></p>
+                  <p className='text-md h-10 leading-10'>MRP <span className='line-through'>₹{localStorage.getItem("userId")!=null?selectedPrice:""}</span></p>
+                  <p className='text-md h-10 leading-10'>Dmart <span className='font-bold text-2xl'>₹{localStorage.getItem("userId")!=null?selectedDiscounted_price:""}</span></p>
                 
                 </div>
                 <div className='flex justify-between'>
-                  <p className='flex justify-center items-center h-12 px-4 bg-yellow-200 text-yellow-800 text-center'>SAVE {selectedPrice-selectedDiscounted_price}</p>
+                  <p className='flex justify-center items-center h-12 px-4 bg-yellow-200 text-yellow-800 text-center'>SAVE {localStorage.getItem("userId")!=null? selectedPrice-selectedDiscounted_price :""}</p>
                   <button type="button" className="h-12 px-6 py-2 font-semibold rounded-xl bg-yellow-400 hover:bg-yellow-200 text-white" onClick={addToCart}>
                     Add to Cart
                   </button>

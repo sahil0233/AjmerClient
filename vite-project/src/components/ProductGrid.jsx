@@ -2,14 +2,16 @@ import React,{useEffect, useState} from 'react';
 import Item from './Item';
 import { firestore } from '../firebase/FirebaseConfig';
 import { getDocs, collection, query,  where } from 'firebase/firestore';
+import Loader from './Loader';
 
 const ProductGrid = (props) => {
-  console.log(props.selectedCategory)
+    const [loading, setLoading] = useState(false);
 
     const [products, setProducts] = useState([]);
 
     useEffect(() =>  {
-    getAllProducts(props.selectedCategory);
+      setLoading(true);
+     getAllProducts(props.selectedCategory);
 },[props.selectedCategory]);
 
 const getAllSubcategories = async (categoryName) => {
@@ -47,13 +49,13 @@ const getAllProducts = async(categoryName) => {
   const newData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     setProducts(newData);
   }
-  
-
+  setLoading(false);
 }
   return (
     <section className=" auto-cols-auto col-span-5 w-fit mx-auto grid grid-cols-1 xl:grid-cols-4 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-4 mt-10 mb-5">
+    {loading && <Loader />}
                 {products.map((item,index) => (
-                      <Item key={index} title={item.title} image={item.image} brand={item.brand} product={item.product} price={item.price} discounted_price={item.discounted_price} id={item.id} variationId={item.variationId} />
+                      <Item key={index} title={item.title} image={item.image} brand={item.brand} product={item.product} id={item.id} variationId={item.variationId} />
                   ))}
     </section>
   )

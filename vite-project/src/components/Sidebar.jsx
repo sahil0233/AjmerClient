@@ -71,13 +71,13 @@ await Promise.all(querySnapshot.docs.map(async (doc) => {
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-6">
               {/* Filters */}
               <form className="hidden lg:block col-span-1 border">
-                <h3 className='border-b border-gray-200 py-2 px-4'>{categoryid}</h3>
+                <h3 className='border-b border-gray-200 py-2 px-4 cursor-pointer' onClick={() => {setSelectedCategory(categoryid)}}>{categoryid}</h3>
                 
                 <div className='flex flex-col'>
                 {categories && categories.map((category,index) => (
                   <Disclosure>
                   <div className=' flex justify-between border-b border-gray-200 px-4 py-2'>
-                      <h1 onClick={() => {setSelectedCategory(category.name)}}>{category.name}</h1>
+                      <h1 className='cursor-pointer' onClick={() => {setSelectedCategory(category.name)}}>{category.name}</h1>
                       <Disclosure.Button className="">
                         +
                       </Disclosure.Button>
@@ -85,7 +85,7 @@ await Promise.all(querySnapshot.docs.map(async (doc) => {
                     <Disclosure.Panel className="text-gray-500">
                     <ul className='flex flex-col gap-2 bg-gray-400'>
                       {category.subcategories.map((subcategory,idx) => (
-                        <li key={idx} className='pl-2' onClick={() => {setSelectedCategory(subcategory)}}>{subcategory}</li>
+                        <li key={idx} className='pl-2 cursor-pointer' onClick={() => {setSelectedCategory(subcategory)}}>{subcategory}</li>
                       ))}
                       </ul>
                     </Disclosure.Panel>
