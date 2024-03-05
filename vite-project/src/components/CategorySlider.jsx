@@ -12,12 +12,35 @@ const CategorySlider = () => {
 
     const navigate = useNavigate();
 
+    function NextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ display: "block", color:"black" }}
+      onClick={onClick}
+    />
+  );
+}
+
+function PrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", color: "black" }}
+      onClick={onClick}
+    />
+  );
+}
+
     const settings = {
-        dots:true,
-        infinte: false,
+        infinte: true,
         speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 3
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        nextArrow: <NextArrow />,
+        prevArrow: <PrevArrow />
     };
 
     useEffect(() => {
@@ -32,22 +55,26 @@ const CategorySlider = () => {
         console.log(data);
         setCategories(data);
     }
+    const imgPaths = [
+        "/src/assets/categoryFruits.svg",
+        "/src/assets/categoryPackagedFood.svg",
+        "/src/assets/categoryGrocery.svg",
+        "/src/assets/categoryPersonalCare.svg",
+        "/src/assets/categoryBaby.svg"
+
+    ]
 
   return (
-    <div className='w-3/4 m-auto'>
-        <div className='mt-24'>
         <Slider {...settings}>
-            {categories && categories.map((c) => (
-                <div className='bg-blue-200 h-22 text-black rounded-xl cursor-pointer' onClick={() => { navigate(`/category/${c.name}`)}}>
+            {categories && categories.map((c,i) => (
+                <div className=' flex items-center justify-center border py-2 text-black rounded-xl cursor-pointer' onClick={() => { navigate(`/category/${c.name}-aesc-${c.displayName}`)}}>
+                    <img className='h-16 w-auto mx-auto' src={imgPaths[i]} />
                     <div className='flex justify-center items-center p-4'>
-                        <p>{c.name}</p>
+                        <p>{c.displayName}</p>
                     </div>
                 </div>
             ))}
         </Slider>
-        </div>
-      
-    </div>
   )
 }
 

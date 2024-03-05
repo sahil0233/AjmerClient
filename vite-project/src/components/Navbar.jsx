@@ -3,7 +3,6 @@ import { useState } from 'react';
 import CategoryListItem from './CategoryListItem';
 import RegisterModal from './RegisterModal';
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
-import SideCart from './SideCart';
 import { collection, getDocs, query , where} from 'firebase/firestore';
 import { firestore } from '../firebase/FirebaseConfig';
 import { useNavigate } from 'react-router-dom';
@@ -67,22 +66,13 @@ const Navbar = () => {
     const [open, setOpen] = useState(false);
 
   return (
-    <div className='flex flex-col border-b shadow-md fixed bg-white top-0 w-full z-10'>
-        <nav className="relative px-4 py-4 flex lg:flex-row flex-row-reverse justify-between items-center bg-white">
+    <div className='h-[69px] flex flex-col border-b shadow-md fixed bg-white top-0 w-full z-10'>
+        <nav className="w-full relative px-4 py-4 flex lg:flex-row flex-row-reverse justify-between items-center bg-white">
             <a className="text-3xl font-bold leading-none cursor-pointer" onClick={() => {navigate("/")}}>
                 <img className='h-8 w-auto' src='/src/assets/martlogo.jpeg' />
             </a>
-            <div className='flex justify-center items-center'>
-            <div className="lg:hidden">
-                <button className="navbar-burger flex items-center text-blue-600 p-3" onClick={toggleMenu}>
-                    <svg className="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <title>Mobile menu</title>
-                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-                    </svg>
-                </button>
-            </div>
-            <ul className={`hidden lg:inline-flex absolute top-3/4 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6`}>
-                <li className="mb-3 md:w-96">
+            <ul className={`w-2/5 max-w-2xl hidden md:inline-flex absolute top-3/4 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:space-x-6`}>
+                <li className="mb-3 w-full">
                     <div className="relative mb-4 flex w-full flex-wrap items-stretch">
                         <input
                         type="search"
@@ -93,7 +83,7 @@ const Navbar = () => {
                         value={searchIterm}
                         onChange={(e) => {setSearchIterm(e.target.value)}} />
                         <button
-                        className="relative z-[2] flex items-center rounded-r bg-yellow-400 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
+                        className="relative z-[2] flex items-center rounded-r bg-blue-500 hover:scale-105 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
                         type="button"
                         id="button-addon1"
                         data-te-ripple-init
@@ -115,6 +105,15 @@ const Navbar = () => {
                     </div>
                 </li>
             </ul>
+            <div className='flex justify-center items-center'>
+            <div className="md:hidden">
+                <button className="navbar-burger flex items-center text-blue-600 p-3" onClick={toggleMenu}>
+                    <svg className="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <title>Mobile menu</title>
+                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                    </svg>
+                </button>
+            </div>
             {localStorage.getItem("userId") ==null ? 
             <button className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 text-sm text-gray-900 font-bold hover:underline" onClick={() =>{setModal(true)}}>Sign In/Register</button>
             : <button className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 text-sm text-gray-900 font-bold hover:underline" onClick={logOut}>Logout</button>}
@@ -124,7 +123,7 @@ const Navbar = () => {
             {/* <SideCart open={open} setOpen={setOpen}/> */}
 
         </nav>
-        <div className="lg:hidden mb-3 px-2 w-full self-center">
+        <div className="md:hidden mb-3 px-2 w-full self-center">
             <div className="relative mb-4 flex w-full flex-wrap items-stretch">
                 <input
                 type="search"
@@ -136,7 +135,7 @@ const Navbar = () => {
                 onChange={(e) => {setSearchIterm(e.target.value)}}
                 />
                 <button
-                className="relative z-[2] flex items-center rounded-r bg-yellow-400 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
+                className="relative z-[2] flex items-center rounded-r bg-blue-500 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-400 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
                 type="button"
                 id="button-addon1"
                 data-te-ripple-init

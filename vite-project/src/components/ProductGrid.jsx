@@ -52,10 +52,10 @@ const getAllProducts = async(categoryName) => {
   setLoading(false);
 }
   return (
-    <section className=" auto-cols-auto col-span-5 w-fit mx-auto grid grid-cols-1 xl:grid-cols-4 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-4 mt-10 mb-5">
+    <section className=" auto-cols-auto w-full pr-20 grid grid-cols-1 xl:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-4 mt-10 mb-5">
     {loading && <Loader />}
                 {products.map((item,index) => (
-                      <Item key={index} title={item.title} image={item.image} brand={item.brand} product={item.product} id={item.id} variationId={item.variationId} />
+                      <Item key={index} title={item.title} image={item.image} brand={item.brand} product={item.product} id={item.id} />
                   ))}
     </section>
   )

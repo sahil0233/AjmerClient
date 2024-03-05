@@ -10,7 +10,7 @@ const CartTotal = ({ cartItems }) => {
                 </div>
                 <div className="py-4 w-11/12 mx-auto flex border-b justify-between">
                 <p className="text-gray-700">Cart Total</p>
-                {cartItems &&<p className="text-gray-700">₹{cartItems.discounted_prices.reduce((acc, item, index) => acc + (cartItems.quantities[index] * parseInt(item)), 0)}</p>}
+                {cartItems &&<p className="text-gray-700">₹{cartItems.reduce((acc, currItem, index) => acc + (currItem.discountPrice * currItem.quantity), 0)}</p>}
                 </div>
                 <div className="py-4 w-11/12 mx-auto flex border-b justify-between">
                 <p className="text-gray-700">Delivery Charge</p>
@@ -18,11 +18,11 @@ const CartTotal = ({ cartItems }) => {
                 </div>
                 <div className="py-4 w-11/12 mx-auto flex justify-between">
                     <p className="text-gray-700">Savings</p>
-                   {cartItems && <p className="text-green-700">₹{cartItems.prices.reduce((acc, item, index) => acc + (cartItems.quantities[index] * parseInt(item)), 0)- cartItems.discounted_prices.reduce((acc, item, index) => acc + (cartItems.quantities[index] * parseInt(item)), 0)}</p>}
+                   {cartItems && <p className="text-green-700">₹{cartItems.reduce((acc, currItem, index) => acc + ((currItem.price * currItem.quantity) - (currItem.discountPrice * currItem.quantity)), 0) }</p>}
                 </div>
                 
             </div>
-            <button className="mt-6 w-full rounded-md bg-yellow-400 py-2 font-medium text-blue-50 hover:bg-yellow-600">PROCEED TO CHECKOUT</button>
+            <button className="mt-6 w-full rounded-md bg-blue-500 py-2 font-medium text-white hover:bg-blue-400">PROCEED TO CHECKOUT</button>
     </div>
   )
 }

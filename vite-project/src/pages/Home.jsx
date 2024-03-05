@@ -1,14 +1,34 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-import CategorySlider from '../components/CategorySlider'
+import CategorySlider from '../components/CategorySlider';
+import { Carousel } from 'flowbite-react';
+import FooterComponent from '../components/FooterComponent';
 
 const Home = () => {
   return (
-    <div>
+    <div className='bg-gray-100'>
         <Navbar />
-        <div className='mt-40 lg:mt-20'>
+        <div className="mt-[69px] h-72">
+          <Carousel indicators={false} leftControl=" " rightControl=" ">
+            <img className='w-full h-auto' src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F1mar24-crsl-dgr-ds.jpg&w=3840&q=75" alt="..." />
+            <img className='w-full h-auto' src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F2024-dgr-03-dg.jpg&w=3840&q=75" alt="..." />
+            <img className='w-full h-auto' src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F6june22-crsl-delivery-dgr1.jpg&w=3840&q=75" alt="..." />
+            <img className='w-full h-auto' src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F1mar24-crsl-dgr-skincare.jpg&w=3840&q=75" alt="..." />
+          </Carousel>
+        </div>
+        <div className='mt-40 bg-white lg:mt-20 border-2 rounded-md p-2 w-11/12 mx-auto'>
         <CategorySlider />
         </div>
+
+        <div className='mt-6 w-11/12 mx-auto p-6 border-2 rounded-md bg-white'>
+        <img src='https://cdn.dmart.in/images/rwd/banners/curated/1mar24-curated-dgr-de.jpg' />
+        </div>
+
+        <div className='mt-6 w-11/12 mx-auto p-6 border-2 rounded-md bg-white'>
+        <img src='https://cdn.dmart.in/images/rwd/banners/curated/1jan24-curated-dgr-bmh.jpg' />
+        </div>
+        
+        <FooterComponent />
     </div>
   )
 }

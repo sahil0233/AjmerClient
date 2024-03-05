@@ -10,12 +10,11 @@ import { collection, getDocs, query, where } from 'firebase/firestore'
 import { firestore } from '../firebase/FirebaseConfig'
 const Sidebar = () => {
 
-    const { categoryid } = useParams();
-
-    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-    const [activeButton, setActiveButton] = useState('home');
+    const { category } = useParams();
+    const categoryid = category.split("-aesc-")[0];
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(categoryid);
+    const parentCategory = category.split("-aesc-")[1];
     const navigate = useNavigate();
 
     
@@ -33,22 +32,22 @@ const Sidebar = () => {
       const querySnapshot = await getDocs(q);
 
 // Use Promise.all to execute async operations concurrently
-await Promise.all(querySnapshot.docs.map(async (doc) => {
-    const data = doc.data();
-    const subcategories = [];
+    await Promise.all(querySnapshot.docs.map(async (doc) => {
+        const data = doc.data();
+        const subcategories = [];
 
-    const q2 = query(categoriesRef, where("parent", "==", data.name));
-    const subcategorySnapshot = await getDocs(q2);
-    subcategorySnapshot.forEach((doc) => {
-        const subcategoryData = doc.data();
-        subcategories.push(subcategoryData.name);
-    });
+        const q2 = query(categoriesRef, where("parent", "==", data.name));
+        const subcategorySnapshot = await getDocs(q2);
+        subcategorySnapshot.forEach((doc) => {
+            const subcategoryData = doc.data();
+            subcategories.push(subcategoryData.displayName);
+        });
 
-    catObj.push({
-        name: data.name,
-        subcategories: subcategories
-    });
-}));
+        catObj.push({
+            name: data.displayName,
+            subcategories: subcategories
+        });
+    }));
 
     setCategories(catObj);
     }
@@ -68,10 +67,10 @@ await Promise.all(querySnapshot.docs.map(async (doc) => {
               Products
             </h2>
 
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-6">
+            <div className="flex gap-x-4 gap-y-10">
               {/* Filters */}
-              <form className="hidden lg:block col-span-1 border">
-                <h3 className='border-b border-gray-200 py-2 px-4 cursor-pointer' onClick={() => {setSelectedCategory(categoryid)}}>{categoryid}</h3>
+              <div className="hidden lg:block w-72 border">
+                <h3 className='border-b border-gray-200 py-2 px-4 cursor-pointer' onClick={() => {setSelectedCategory(categoryid)}}>{parentCategory}</h3>
                 
                 <div className='flex flex-col'>
                 {categories && categories.map((category,index) => (
@@ -83,20 +82,20 @@ await Promise.all(querySnapshot.docs.map(async (doc) => {
                       </Disclosure.Button>
                     </div>
                     <Disclosure.Panel className="text-gray-500">
-                    <ul className='flex flex-col gap-2 bg-gray-400'>
+                    <ul className='flex flex-col gap-2 bg-gray-200 px-4'>
                       {category.subcategories.map((subcategory,idx) => (
-                        <li key={idx} className='pl-2 cursor-pointer' onClick={() => {setSelectedCategory(subcategory)}}>{subcategory}</li>
+                        <li key={idx} className='pl-2 cursor-pointer text-gray-800' onClick={() => {setSelectedCategory(subcategory)}}>{subcategory}</li>
                       ))}
                       </ul>
                     </Disclosure.Panel>
                   </Disclosure>
                 ))}
                 </div>
-              </form>
+              </div>
 
               {/* Product grid */}
               <ProductGrid selectedCategory={selectedCategory} />
-              <div className="lg:col-span-3">{/* Your content */}</div>
+              <div className="lg:col-span-2">{/* Your content */}</div>
             </div>
           </section>
         </main>

@@ -103,25 +103,35 @@ const AddProduct = () => {
             imgUrls.push(url);
         }
         
-        const variationDoc = await addDoc(variationRef,{
-            variants : variations,
-            quantity : quantity,
-            price : price,
-            discounted_price : discounted_price
-        })
+        // const variationDoc = await addDoc(variationRef,{
+        //     variants : variations,
+        //     quantity : quantity,
+        //     price : price,
+        //     discounted_price : discounted_price
+        // })
 
-        await addDoc(prodRef, {
+       const docRef = await addDoc(prodRef, {
                         title,
                         description,
                         category : selectedCategory,
-                        variationId : variationDoc.id,
                         tags: tags,
                         image : imgUrls,
                         voucher,
                         brand,
-                        visible
+                        visible,
+                        
                     });
-                    console.log("done");
+                    const variationsCollection = collection(firestore, "products",docRef.id,"variations");
+            for(let i =0;i<variations.length;i++){
+                const variationdocRef = await addDoc(variationsCollection, {
+                name : variations[i],
+                quantity : quantity[i],
+                price : price[i],
+                discountPrice : discounted_price[i]
+                })
+            }
+        
+            console.log("done");
     } catch(e) {
         console.error(e);
     }
