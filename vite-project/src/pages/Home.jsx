@@ -8,15 +8,15 @@ const Home = () => {
   return (
     <div className='bg-gray-100'>
         <Navbar />
-        <div className="mt-[69px] h-72">
+        <div className="mt-32 md:mt-[69px] h-28 lg:h-60 xl:h-80 2xl:h-96">
           <Carousel indicators={false} leftControl=" " rightControl=" ">
-            <img className='w-full h-auto' src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F1mar24-crsl-dgr-ds.jpg&w=3840&q=75" alt="..." />
-            <img className='w-full h-auto' src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F2024-dgr-03-dg.jpg&w=3840&q=75" alt="..." />
-            <img className='w-full h-auto' src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F6june22-crsl-delivery-dgr1.jpg&w=3840&q=75" alt="..." />
-            <img className='w-full h-auto' src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F1mar24-crsl-dgr-skincare.jpg&w=3840&q=75" alt="..." />
+            <img className='w-full h-full' src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F1mar24-crsl-dgr-ds.jpg&w=3840&q=75" alt="..." />
+            <img className='w-full h-full' src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F2024-dgr-03-dg.jpg&w=3840&q=75" alt="..." />
+            <img className='w-full h-full' src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F6june22-crsl-delivery-dgr1.jpg&w=3840&q=75" alt="..." />
+            <img className='w-full h-full' src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F1mar24-crsl-dgr-skincare.jpg&w=3840&q=75" alt="..." />
           </Carousel>
         </div>
-        <div className='mt-40 bg-white lg:mt-20 border-2 rounded-md p-2 w-11/12 mx-auto'>
+        <div className='relative mt-40 bg-white mt-8 md:mt-12 lg:mt-20 border-2 rounded-md py-2 px-4 w-11/12 mx-auto'>
         <CategorySlider />
         </div>
 

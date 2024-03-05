@@ -47,10 +47,11 @@ const Navbar = () => {
             const subcategorySnapshot = await getDocs(q2);
             subcategorySnapshot.forEach((doc) => {
                 const subcategoryData = doc.data();
-                subcategories.push(subcategoryData.name);
+                subcategories.push({subcategoryDisplayName :subcategoryData.displayName, subcategoryName :subcategoryData.name });
             });
 
             catObj.push({
+                displayName : data.displayName,
                 name: data.name,
                 subcategories: subcategories
             });
@@ -69,7 +70,7 @@ const Navbar = () => {
     <div className='h-[69px] flex flex-col border-b shadow-md fixed bg-white top-0 w-full z-10'>
         <nav className="w-full relative px-4 py-4 flex lg:flex-row flex-row-reverse justify-between items-center bg-white">
             <a className="text-3xl font-bold leading-none cursor-pointer" onClick={() => {navigate("/")}}>
-                <img className='h-8 w-auto' src='/src/assets/martlogo.jpeg' />
+                <img className='h-8 w-auto' src='https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2Fmartlogo.jpeg?alt=media&token=ee6e2494-2792-4ff4-9219-f9de328d566f' />
             </a>
             <ul className={`w-2/5 max-w-2xl hidden md:inline-flex absolute top-3/4 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:space-x-6`}>
                 <li className="mb-3 w-full">
@@ -123,7 +124,7 @@ const Navbar = () => {
             {/* <SideCart open={open} setOpen={setOpen}/> */}
 
         </nav>
-        <div className="md:hidden mb-3 px-2 w-full self-center">
+        <div className="md:hidden mb-3 px-2 w-full self-center bg-white">
             <div className="relative mb-4 flex w-full flex-wrap items-stretch">
                 <input
                 type="search"
@@ -156,9 +157,9 @@ const Navbar = () => {
         </div>
         <div className={`lg:hidden navbar-menu relative z-50 ${isOpen? "": "hidden"}`}>
             <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25" onClick={toggleMenu}></div>
-            <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white border-r overflow-y-auto">
+            <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 bg-white border-r overflow-y-auto">
                 <div className="flex items-center mb-8">
-                    <button className="navbar-close" onClick={toggleMenu}>
+                    <button className="navbar-close pl-2" onClick={toggleMenu}>
                         <svg className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
@@ -167,8 +168,8 @@ const Navbar = () => {
                 <div>
                     <ul className='gap-4'>
                         {categories && categories.map((category,idx) => (
-                        <li className="py-4 border-b border-gray-200" key={idx}>
-                            <CategoryListItem categoryName ={category.name} subCategories = {category.subcategories} />
+                        <li className=" border-b border-gray-400" key={idx}>
+                            <CategoryListItem categoryName={category.name} categoryDisplayName ={category.displayName} subCategories = {category.subcategories} />
                         </li>
                     ))}
                     </ul>

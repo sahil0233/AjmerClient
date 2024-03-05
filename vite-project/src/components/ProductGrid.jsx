@@ -11,8 +11,12 @@ const ProductGrid = (props) => {
 
     useEffect(() =>  {
       setLoading(true);
+      if(props.subcategoryName.length > 0){
+        getAllProducts(props.subcategoryName)
+      }else{
      getAllProducts(props.selectedCategory);
-},[props.selectedCategory]);
+      }
+},[props.selectedCategory, props.subcategoryName]);
 
 const getAllSubcategories = async (categoryName) => {
   // Array to store subcategories
@@ -52,7 +56,7 @@ const getAllProducts = async(categoryName) => {
   setLoading(false);
 }
   return (
-    <section className=" auto-cols-auto w-full pr-20 grid grid-cols-1 xl:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-4 mt-10 mb-5">
+    <section className=" w-full px-2 auto-cols-auto lg:w-3/4 xl:pr-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-items-center justify-center gap-y-10 sm:gap-y-20 gap-x-4 mt-10 mb-5">
     {loading && <Loader />}
                 {products.map((item,index) => (
                       <Item key={index} title={item.title} image={item.image} brand={item.brand} product={item.product} id={item.id} />

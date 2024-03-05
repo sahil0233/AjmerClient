@@ -180,17 +180,18 @@ const Item = (props) => {
 
   return (
     
-    <div className="w-full bg-white border-2 shadow-md rounded-xl">
-    {selectedVariant &&
-        <div className='w-full pt-4' >
-            <img src={props.image} alt="Product" className="h-32 w-full object-contain rounded-t-xl cursor-pointer duration-500 hover:scale-105" onClick={() => {navigate(`/product/${props.id}`)}} />
-            <div className="flex flex-col px-4 py-3">
+    <div className="w-11/12 p-2 lg:p-4 sm:w-full h-60 sm:h-96 bg-white border-2 shadow-md rounded-xl">
+    {selectedVariant && <>
+        <div className='w-full sm:pt-4 flex justify-around sm:flex-col' >
+        
+            <img src={props.image} alt="Product" className="h-24 md:h-28 lg:h-32 w-auto object-contain rounded-t-xl cursor-pointer duration-500 hover:scale-105" onClick={() => {navigate(`/product/${props.id}`)}} />
+            <div className="w-1/2 sm:w-full gap-2 sm:gap-0  flex flex-col sm:px-4 md:px-2 sm:py-3">
                 <span className="text-gray-400 mr-3 uppercase text-xs">{props.brand}</span>
-                <p className="text-lg font-normal text-gray-600 truncate block capitalize cursor-pointer hover:underline" onClick={() => {navigate(`/product/${props.id}`)}}>{props.title} : <span>{selectedVariant.name}</span> </p>
-                <div className="flex justify-around items-center">
-                    <div className='flex justify-center items-center gap-2'>
+                <p className="text-md sm:text-sm lg:text-lg font-medium text-gray-600 truncate block capitalize cursor-pointer hover:underline" onClick={() => {navigate(`/product/${props.id}`)}}>{props.title} : <span>{selectedVariant.name}</span> </p>
+                <div className="flex justify-between lg:justify-around items-center">
+                    <div className='flex md:justify-center items-center gap-2'>
                     <p className="text-xs text-gray-600 cursor-auto ml-2"><span className='font-normal block text-center'>MRP</span><span className='line-through'>₹{localStorage.getItem("userId")!=null?selectedVariant.price:""}</span></p>
-                    <p className="text-sm font-semibold text-black cursor-auto my-3"><span className='font-normal block text-center'>Mart</span>₹{localStorage.getItem("userId")!=null?selectedVariant.discountPrice:""}</p>
+                    <p className="text-xs sm:text-sm font-semibold text-black cursor-auto my-3"><span className='font-normal block text-center'>Mart</span>₹{localStorage.getItem("userId")!=null?selectedVariant.discountPrice:""}</p>
                     </div>
                     {/* <div>
                     <p className='text-xs text-gray-500 font-medium'>You Pay</p>
@@ -199,6 +200,78 @@ const Item = (props) => {
                     <p className='flex flex-col justify-center items-center h-12 px-4 bg-blue-200 text-blue-800 text-center'>₹{localStorage.getItem("userId")!=null? selectedVariant.price-selectedVariant.discountPrice :""}<span className='block text-xs'> OFF </span></p>
                 </div>
                 <Listbox value={selectedVariant.name} onChange={handleVariantChange}>
+                        <div className="hidden sm:block relative mt-1">
+                        <Listbox.Button className="cursor-pointer hover:border-2 hover:border-blue-500 relative w-full border-2 cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                            <span className="block truncate">{selectedVariant.name}</span>
+                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                            <ChevronUpDownIcon
+                                className="h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                            />
+                            </span>
+                        </Listbox.Button>
+                        <Transition
+                            as={Fragment}
+                            leave="transition ease-in duration-100"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                            {variations.map((variation, indx) => (
+                                <Listbox.Option
+                                key={indx}
+                                className={({ active }) =>
+                                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                                    active ? 'bg-gray-200 text-black' : 'text-gray-900'
+                                    }`
+                                }
+                                value={variation.name}
+                                >
+                                {({ selectedVariant }) => (
+                                    <>
+                                    <span
+                                        className={`block truncate ${
+                                        selectedVariant ? 'font-medium' : 'font-normal'
+                                        }`}
+                                    >
+                                        {variation.name}
+                                    </span>
+                                    {selectedVariant ? (
+                                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                        </span>
+                                    ) : null}
+                                    </>
+                                )}
+                                </Listbox.Option>
+                            ))}
+                            </Listbox.Options>
+                        </Transition>
+                        </div>
+                </Listbox>
+                {quantity == 0 ?
+                <button className='hidden sm:flex mt-2 w-full rounded-md flex gap-2 py-2 justify-center items-center bg-blue-500 hover:bg-blue-400' onClick={addToCart}>
+                <ShoppingCartIcon className='w-auto h-5 text-white' />
+                <span className='text-white font-medium text-sm'>Add To Cart </span>
+                </button>
+                :
+                <div className='hidden sm:block mt-2 w-full flex justify-between items-center'>
+                    <div className="flex items-center border-gray-100">
+                        <button className={`${quantity==1 ? "block": "hidden"} h-8 cursor-pointer rounded-l bg-blue-500 py-1 px-3.5 duration-100 hover:bg-blue-300`} onClick={deleteCartItem}> <TrashIcon className='text-white w-auto h-4'/> </button>
+                        <button className={`${quantity>1 ? "block": "hidden"} text-white cursor-pointer rounded-l bg-blue-500 py-1 px-3.5 duration-100 hover:bg-blue-300`} onClick={decreaseQuantity}> - </button>
+                        <span className="h-8 w-8 border bg-white text-center text-black text-xs outline-none py-2">{quantity}</span>
+                        <button disabled={quantity== 3} className={`${quantity>=3? "bg-gray-400 cursor-default":" bg-blue-500 hover:bg-blue-300" } h-8 text-white text-xl rounded-r  px-3 duration-100`} onClick={increaseQuantity}> + </button>
+                    </div>
+                    <div className='w-10 h-8 flex items-center justify-center border border-gray-400 cursor-pointer' onClick={deleteCartItem}><XMarkIcon className='h-5 w-auto' /></div>
+                </div>
+                }
+                        {quantity >= 3 &&
+                            <span className="hidden sm:block w-full text-gray-400 text-xs font-normal">Add more from cart</span>
+                        }
+            </div>
+        </div>
+        <div className='block sm:hidden'>
+            <Listbox value={selectedVariant.name} onChange={handleVariantChange}>
                         <div className="relative mt-1">
                         <Listbox.Button className="cursor-pointer hover:border-2 hover:border-blue-500 relative w-full border-2 cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                             <span className="block truncate">{selectedVariant.name}</span>
@@ -254,7 +327,7 @@ const Item = (props) => {
                 <span className='text-white font-medium text-sm'>Add To Cart </span>
                 </button>
                 :
-                <div className='mt-2 w-full flex justify-between items-center'>
+                <div className=' mt-2 w-full flex justify-between items-center'>
                     <div className="flex items-center border-gray-100">
                         <button className={`${quantity==1 ? "block": "hidden"} h-8 cursor-pointer rounded-l bg-blue-500 py-1 px-3.5 duration-100 hover:bg-blue-300`} onClick={deleteCartItem}> <TrashIcon className='text-white w-auto h-4'/> </button>
                         <button className={`${quantity>1 ? "block": "hidden"} text-white cursor-pointer rounded-l bg-blue-500 py-1 px-3.5 duration-100 hover:bg-blue-300`} onClick={decreaseQuantity}> - </button>
@@ -265,10 +338,11 @@ const Item = (props) => {
                 </div>
                 }
                         {quantity >= 3 &&
-                            <span className="w-full text-gray-400 text-xs font-normal">Max 3 items</span>
+                            <span className="w-full text-gray-400 text-xs font-normal">Add more from cart</span>
                         }
-            </div>
+
         </div>
+        </>
     }
     </div>
   )

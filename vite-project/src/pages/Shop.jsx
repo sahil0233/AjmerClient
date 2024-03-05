@@ -2,15 +2,14 @@ import React from 'react'
 import Navbar from '../components/Navbar'
 import Item from '../components/Item'
 import Sidebar from '../components/Sidebar'
-
+import FooterComponent from '../components/FooterComponent'
 
 const Shop = () => {
   return (
-    <div>
+    <div className='min-h-screen flex flex-col justify-between'>
         <Navbar />
-        <div className='flex flex-col mt-36 md:mt-20'>
-            <Sidebar />
-        </div>
+        <Sidebar />
+        <FooterComponent />
       
     </div>
   )

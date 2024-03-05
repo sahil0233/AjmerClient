@@ -5,9 +5,10 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import classNames from "classnames";
 import ProductGrid from "./ProductGrid"
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { firestore } from '../firebase/FirebaseConfig'
+
 const Sidebar = () => {
 
     const { category } = useParams();
@@ -15,7 +16,9 @@ const Sidebar = () => {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(categoryid);
     const parentCategory = category.split("-aesc-")[1];
-    const navigate = useNavigate();
+
+    const searchParams = new URLSearchParams(useLocation().search);
+    const subcategoryName = searchParams.get("subcategoryName") || "" ;
 
     
 
@@ -53,23 +56,18 @@ const Sidebar = () => {
     }
 
   return (
-    <div className="bg-white">
-      <div>
-        <main className="mx-auto w-full pr-4 sm:pr-6">
+        <main className="mx-auto w-full md:pr-4 sm:pr-6 flex flex-col flex-grow mt-36 md:mt-20">
           <div className="flex items-baseline justify-between border-b border-gray-200 py-4">
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 pl-4">All Categories</h1>
 
             
           </div>
 
-          <section aria-labelledby="products-heading" className="pb-24">
-            <h2 id="products-heading" className="sr-only">
-              Products
-            </h2>
+          <section aria-labelledby="products-heading" className="flex-grow flex justify-center items-center">
 
-            <div className="flex gap-x-4 gap-y-10">
+            <div className="md:flex gap-x-4 gap-y-10 flex-grow ">
               {/* Filters */}
-              <div className="hidden lg:block w-72 border">
+              <div className="hidden md:block md:w-52 lg:w-72 border">
                 <h3 className='border-b border-gray-200 py-2 px-4 cursor-pointer' onClick={() => {setSelectedCategory(categoryid)}}>{parentCategory}</h3>
                 
                 <div className='flex flex-col'>
@@ -94,13 +92,13 @@ const Sidebar = () => {
               </div>
 
               {/* Product grid */}
-              <ProductGrid selectedCategory={selectedCategory} />
+              <ProductGrid subcategoryName={subcategoryName} selectedCategory={selectedCategory} />
               <div className="lg:col-span-2">{/* Your content */}</div>
             </div>
           </section>
         </main>
-      </div>
-    </div>
+      
+    
   )
 }
 
