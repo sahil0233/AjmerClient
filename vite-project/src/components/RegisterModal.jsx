@@ -103,7 +103,7 @@ const RegisterModal = (props) => {
   return (
     <div className={` ${props.modal?"":"hidden"} bg-opacity-60 h-screen w-screen absolute bg-black text-gray-900 flex flex-row justify-center items-center`}>
     {loading && <Loader />}
-    <div className="max-w-screen-md h-5/6 ssmax-h-[768px]   bg-white shadow sm:rounded-lg flex justify-center flex-1">
+    <div className="max-w-screen-md h-5/6 max-h-[768px]   bg-white shadow sm:rounded-lg flex justify-center flex-1 mx-12">
         <div className="flex-1 bg-contain bg-no-repeat bg-center bg-[url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg')] text-center hidden lg:flex">
         </div>
         {showOtpInput?
@@ -134,7 +134,7 @@ const RegisterModal = (props) => {
             </div>
             </div>
             :
-            <div className="flex-1 lg:w-1/2 xl:w-5/12 overflow-auto">
+            <div className="flex-1 lg:w-1/2 xl:w-5/12 overflow-auto max-w-md">
                 <div>
                     <h1 className='py-4 flex justify-center items-center border-b text-md text-black'>Let's Get You Logged In</h1>
                 </div>
@@ -147,7 +147,7 @@ const RegisterModal = (props) => {
                 </div>
                 <h2 className='text-gray-400'>By continuing, you agree to our Terms, Refunds and Privacy Policy</h2>
                 
-                <Button color='warning' className='w-full' disabled={!isPhoneNumberValid} onClick={sendOtp}>CONTINUE</Button>
+                <Button color='warning' className='max-w-md w-full' disabled={!isPhoneNumberValid} onClick={sendOtp}>CONTINUE</Button>
                 </div>
             </div>
 

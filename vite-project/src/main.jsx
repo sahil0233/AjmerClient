@@ -11,6 +11,7 @@ import Shop from './pages/Shop.jsx';
 import Cart from './pages/Cart.jsx';
 import RegisterModal from './components/RegisterModal.jsx';
 import Admin from './pages/Admin.jsx';
+import { RecoilRoot } from 'recoil';
 
 const router = createBrowserRouter([
   {
@@ -46,7 +47,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+  <RecoilRoot>
     <RouterProvider router={router} />
     <div id='recaptcha-container'></div>
+  </RecoilRoot>
   </React.StrictMode>,
 )

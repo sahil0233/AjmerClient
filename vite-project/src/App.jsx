@@ -7,7 +7,7 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <><h1 className='bg-gray-200 w-32 '>hello</h1></>
+    <></>
   )
 }
 

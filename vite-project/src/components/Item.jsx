@@ -90,9 +90,6 @@ const Item = (props) => {
                             productBrand : props.brand
 
                         })
-                        console.log(cartTotal);
-                        const newt = cartTotal+1
-                        setCartTotal(newt);
 
             }
             else {
@@ -113,8 +110,7 @@ const Item = (props) => {
 
                         })
                 } 
-                setQuantity(1); 
-                console.log(cartTotal);
+                setQuantity(1);
                 setCartTotal(cartTotal+1);
         
         }else {
@@ -139,6 +135,7 @@ const Item = (props) => {
             console.log(itemDoc.docs[0].id);
             const docDel = doc(firestore,"carts", currdoc.id, "items", itemDoc.docs[0].id)
                 await deleteDoc(docDel)
+                setCartTotal(cartTotal-quantity);
                 setQuantity(0);
         }catch(err){
             console.error(err)
@@ -159,7 +156,8 @@ const Item = (props) => {
             await updateDoc(itemDoc, {
                 quantity : increment(-1)
             })
-            setQuantity(quantity-1) 
+            setQuantity(quantity-1)
+            setCartTotal(cartTotal-1);
         }catch(err){
             console.error(err);
         }
@@ -180,9 +178,7 @@ const Item = (props) => {
                 quantity : increment(1)
             }) 
             setQuantity(quantity+1)
-            console.log(cartTotal);
-            const newt = cartTotal+1
-            setCartTotal(newt);
+            setCartTotal(cartTotal+1);
         }catch(err) {
             console.error(err)
         }

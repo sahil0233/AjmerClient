@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 const CartTotal = ({ cartItems }) => {
 
   return (
-    <div className="mt-6 h-full   md:mt-0 md:w-1/4">
+    <div className="mt-6 h-full   md:mt-0 w-full lg:w-1/4">
             <div className="border bg-white rounded-sm shadow-md">
                 <div className='w-full py-4 pl-2 border-b'>
                     <h1 className='font-medium text-md'>Price Summary</h1>

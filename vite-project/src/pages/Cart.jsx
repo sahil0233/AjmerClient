@@ -50,20 +50,18 @@ const cart = () => {
   }
 
   const deletedCartItem = (index) => {
-    setCartItems(prevCartItems => {
-        const updatedCartItems = prevCartItems.filter((item, currentIndex) => currentIndex !== index);
-        return updatedCartItems;
-    });
+        const updatedCartItems = cartItems.filter((item, currentIndex) => currentIndex !== index);
+        setCartItems(updatedCartItems)
   }
 
     
 
   return (
-    <div className="min-h-screen flex flex-col justify-between mt-32 md:mt-[69px]">
+    <div className="min-h-screen flex flex-col justify-between mt-32 md:mt-28">
         <Navbar />
         {cartItems && cartItems.length>0 ?
-        <div className="mx-auto w-full px-1 sm:w-11/12 max-w-screen-2xl justify-between px-6 lg:flex md:space-x-6 xl:px-0">
-          <div className='sm:w-11/12'>
+        <div className="mx-auto w-full px-1 sm:w-11/12 max-w-screen-2xl md:justify-between px-6 lg:flex lg:space-x-6 xl:px-0">
+          <div className='sm:w-full'>
           <h1 className="mb-2 sm:mb-10 flex items-center gap-2"><span className='text-md font-bold'>My Cart</span><span className='text-md text-gray-600 mr-2'>({cartItems.reduce((total, currentItem) => {return total + parseInt(currentItem.quantity)},0)} item(s))</span><span className='hidden sm:block h-[1px] flex-grow bg-gray-600'></span></h1>
           <div className='grid grid-cols-8 w-full mx-4 mb-4 text-gray-500 font-medium'>
           <p className='hidden lg:block col-span-4'>Product</p>

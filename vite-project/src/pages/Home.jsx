@@ -28,7 +28,7 @@ const Home = () => {
         <img src='https://cdn.dmart.in/images/rwd/banners/curated/1mar24-curated-dgr-de.jpg' />
         </div>
 
-        <div className='mt-6 w-11/12 mx-auto p-6 border-2 rounded-md bg-white'>
+        <div className='mt-6 w-11/12 mx-auto p-6 border-2 rounded-md bg-white mb-10'>
         <img src='https://cdn.dmart.in/images/rwd/banners/curated/1jan24-curated-dgr-bmh.jpg' />
         </div>
         

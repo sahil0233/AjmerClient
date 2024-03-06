@@ -6,6 +6,8 @@ import Navbar from '../components/Navbar';
 import { firestore } from '../firebase/FirebaseConfig';
 import { doc,documentId, getDoc,query,where,collection, getDocs, addDoc, arrayUnion, updateDoc, increment, deleteDoc } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { cartTotalAtom } from '../store/atoms/totalCartQuantity';
 const Product = (props) => {
 
   const [product, setProduct] = useState();
@@ -13,6 +15,7 @@ const Product = (props) => {
   const [variations, setVariations] = useState([]);
   const [selectedVariant, setSelectedVariant ] = useState();
   const [quantity, setQuantity] = useState(0); 
+  const [cartTotal, setCartTotal] = useRecoilState(cartTotalAtom);
 
   const { id } = useParams();
 
@@ -118,6 +121,7 @@ const addToCart = async() => {
                         })
                 } 
                 setQuantity(1); 
+                setCartTotal(cartTotal+1);
         
         }else {
             alert("Sign in first");
@@ -141,6 +145,7 @@ const addToCart = async() => {
             console.log(itemDoc.docs[0].id);
             const docDel = doc(firestore,"carts", currdoc.id, "items", itemDoc.docs[0].id)
                 await deleteDoc(docDel)
+                setCartTotal(cartTotal-quantity);
                 setQuantity(0);
         }catch(err){
             console.error(err)
@@ -162,6 +167,7 @@ const addToCart = async() => {
                 quantity : increment(-1)
             })
             setQuantity(quantity-1) 
+            setCartTotal(cartTotal-1);
         }catch(err){
             console.error(err);
         }
@@ -182,6 +188,7 @@ const addToCart = async() => {
                 quantity : increment(1)
             }) 
             setQuantity(quantity+1)
+            setCartTotal(cartTotal+1);
         }catch(err) {
             console.error(err)
         }
@@ -281,7 +288,7 @@ const addToCart = async() => {
                     <button disabled={quantity== 3} className={`${quantity>=3? "bg-gray-400 cursor-default":" bg-blue-500 hover:bg-blue-300" } h-8 text-white text-xl rounded-r  px-3 duration-100`} onClick={increaseQuantity}> + </button>
                   </div>
                     {quantity >= 3 &&
-                            <span className="w-full text-gray-400 text-xs font-normal text-center">Max 3 items</span>
+                            <span className="w-full text-gray-400 text-xs font-normal text-center">Add more from Cart</span>
                         }
                   </div>
                   }

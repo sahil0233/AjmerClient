@@ -3,11 +3,14 @@ import { collection, query, where, getDocs, doc, updateDoc, deleteDoc } from 'fi
 import React,{useState} from 'react'
 import { firestore } from '../firebase/FirebaseConfig';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { cartTotalAtom } from '../store/atoms/totalCartQuantity';
 
 const CartItem = (props) => {
     const [editable, setEditable] = useState(false);
     const [quantity, setQuantity] = useState(props.product.quantity)
     const navigate = useNavigate();
+    const [cartTotal, setCartTotal] = useRecoilState(cartTotalAtom);
 
     const handleEditClick = () => {
     setEditable(true);
@@ -30,6 +33,7 @@ const CartItem = (props) => {
                 quantity : quantity
             }) 
             props.updateCart(props.index,quantity);
+            setCartTotal(cartTotal+quantity);
         }catch(err) {
             console.error(err)
         }
@@ -53,6 +57,7 @@ const CartItem = (props) => {
             console.log(itemDoc.docs[0].id);
             const docDel = doc(firestore,"carts", currdoc.id, "items", itemDoc.docs[0].id)
                 await deleteDoc(docDel)
+                setCartTotal(cartTotal-quantity);
                 setQuantity(0);
                 props.deletedCartItem(props.index);
         }catch(err){
@@ -63,9 +68,9 @@ const CartItem = (props) => {
 
   return (
         <div> 
-                <div className="h-36 lg:h-32 flex md:grid grid-cols-8 mb-6 rounded-lg border px-2">
-                    <img src={props.product.productImage} alt="product-image" className="w-24 h-auto col-span-1 box-border md:h-full p-2 rounded-lg md:w-40" />
-                    <div className="col-span-7 lg:grid grid-cols-7 sm:mx-4  w-full sm:justify-between">
+                <div className="h-40 md:h-36 lg:h-32 flex md:grid grid-cols-8 mb-6 rounded-lg border px-2 py-2">
+                    <img src={props.product.productImage} alt="product-image" className="w-24 h-auto col-span-2  md:col-span-1 box-border md:h-full p-2 rounded-lg" />
+                    <div className="col-span-6 md:col-span-7 lg:grid grid-cols-7 sm:mx-4  w-full sm:justify-between">
                         <div className="mt-2 lg:mt-5 sm:mt-0 flex flex-col col-span-3 justify-center">
                         <h2 className="text-xl font-normal text-black hover:underline cursor-pointer" onClick={() =>{navigate(`/product/${props.product.productId}`)}}>{props.product.productTitle} : {props.product.variantName}</h2>
                         <p className="mt-1 text-xl text-gray-600">Variant: <span className=' text-xl text-black font-medium'>{props.product.variantName}</span></p>
