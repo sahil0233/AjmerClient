@@ -11,6 +11,7 @@ const cart = () => {
     
     const userId = localStorage.getItem("userId");
     const [cartItems, setCartItems ] = useState();
+    const [cartTotal, setCartTotal] = useState();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,6 +31,7 @@ const cart = () => {
                     allItems.push({id: doc.id ,...doc.data()});
                     })
                     setCartItems(allItems);
+                    
                 }
         }
 

@@ -8,6 +8,7 @@ import ProductGrid from "./ProductGrid"
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { firestore } from '../firebase/FirebaseConfig'
+import { RecoilRoot } from 'recoil'
 
 const Sidebar = () => {
 
@@ -56,6 +57,7 @@ const Sidebar = () => {
     }
 
   return (
+    <RecoilRoot>
         <main className="mx-auto w-full md:pr-4 sm:pr-6 flex flex-col flex-grow mt-36 md:mt-20">
           <div className="flex items-baseline justify-between border-b border-gray-200 py-4">
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 pl-4">All Categories</h1>
@@ -97,6 +99,7 @@ const Sidebar = () => {
             </div>
           </section>
         </main>
+        </RecoilRoot>
       
     
   )

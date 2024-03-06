@@ -154,7 +154,8 @@ const RegisterModal = (props) => {
         }
         
     </div>
-    <div className='h-5/6 max-h-[768px] ml-2 cursor-pointer' onClick={() => {props.setModal(false)}}><XMarkIcon className="h-6 w-6" color='white' aria-hidden="true" /></div>
+    {/* x mark to close modal */}
+    {/* <div className='h-5/6 max-h-[768px] ml-2 cursor-pointer' onClick={() => {props.setModal(false)}}><XMarkIcon className="h-6 w-6" color='white' aria-hidden="true" /></div> */}
     
     </div>
     

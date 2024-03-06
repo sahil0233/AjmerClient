@@ -7,17 +7,29 @@ import { collection, getDocs, query , where} from 'firebase/firestore';
 import { firestore } from '../firebase/FirebaseConfig';
 import { useNavigate } from 'react-router-dom';
 import { getAuth,signOut } from 'firebase/auth';
+import CartIcon from './CartIcon';
+import { RecoilRoot, useRecoilValue } from 'recoil';
+import { cartTotalAtom } from '../store/atoms/totalCartQuantity';
 
 const Navbar = () => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [searchIterm, setSearchIterm] = useState("");
+    const [modal, setModal] = useState(false);
+    const cartTotal = useRecoilValue(cartTotalAtom);
+    console.log("inside nav");
+    console.log(cartTotal)
 
     const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         getCategories();
+        if(localStorage.getItem("userId")==null){
+        setTimeout(() =>{
+          setModal(true);
+        },3000)
+      }
     },[])
 
     const auth = getAuth();
@@ -63,8 +75,7 @@ const Navbar = () => {
       setIsOpen(!isOpen);
     };
 
-    const [modal, setModal] = useState(false);
-    const [open, setOpen] = useState(false);
+    
 
   return (
     <div className='h-[69px] flex flex-col border-b shadow-md fixed bg-white top-0 w-full z-10'>
@@ -118,7 +129,9 @@ const Navbar = () => {
             {localStorage.getItem("userId") ==null ? 
             <button className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 text-sm text-gray-900 font-bold hover:underline" onClick={() =>{setModal(true)}}>Sign In/Register</button>
             : <button className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 text-sm text-gray-900 font-bold hover:underline" onClick={logOut}>Logout</button>}
-            <ShoppingCartIcon className="h-6 w-6 text-gray-500 cursor-pointer" onClick={() => {navigate("/cart")}}/>
+            <RecoilRoot>
+            <CartIcon />
+            </RecoilRoot>
             </div>
             {/* onClick={() => setOpen(true)} */}
             {/* <SideCart open={open} setOpen={setOpen}/> */}
@@ -136,7 +149,7 @@ const Navbar = () => {
                 onChange={(e) => {setSearchIterm(e.target.value)}}
                 />
                 <button
-                className="relative z-[2] flex items-center rounded-r bg-blue-500 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-400 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
+                className="relative flex items-center rounded-r bg-blue-500 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-400 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
                 type="button"
                 id="button-addon1"
                 data-te-ripple-init

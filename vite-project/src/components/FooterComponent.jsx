@@ -23,9 +23,13 @@ const FooterComponent = () => {
             </div>
             <div>
               <Footer.Title title="Follow us" />
-              <Footer.LinkGroup col>
-                <Footer.Link href="#">Github</Footer.Link>
-                <Footer.Link href="#">Discord</Footer.Link>
+              <Footer.LinkGroup flex>
+                <Footer.Link href="#">
+                  <img className='w-6 h-auto' src='https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2Ffacebook.svg?alt=media&token=074ee693-5cec-43b3-a8d3-c516825e4391' />
+                </Footer.Link>
+                <Footer.Link href="#">
+                  <img className='w-6 h-auto' src='https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2Finstagram.svg?alt=media&token=5291bf6d-489c-40db-977e-bdb5f5caa8f0' />
+                </Footer.Link>
               </Footer.LinkGroup>
             </div>
             <div>

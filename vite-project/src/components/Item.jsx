@@ -5,6 +5,8 @@ import { firestore } from '../firebase/FirebaseConfig';
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon, TrashIcon } from '@heroicons/react/20/solid'
 import { ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useRecoilState } from 'recoil';
+import { cartTotalAtom } from '../store/atoms/totalCartQuantity';
 
 const Item = (props) => {
     
@@ -12,6 +14,7 @@ const Item = (props) => {
     const [selectedVariant, setSelectedVariant ] = useState();
     const [quantity, setQuantity] = useState(0);
     const navigate = useNavigate();
+    const [cartTotal, setCartTotal] = useRecoilState(cartTotalAtom);
 
     useEffect(() => {
         getVariationData();
@@ -87,6 +90,9 @@ const Item = (props) => {
                             productBrand : props.brand
 
                         })
+                        console.log(cartTotal);
+                        const newt = cartTotal+1
+                        setCartTotal(newt);
 
             }
             else {
@@ -108,6 +114,8 @@ const Item = (props) => {
                         })
                 } 
                 setQuantity(1); 
+                console.log(cartTotal);
+                setCartTotal(cartTotal+1);
         
         }else {
             alert("Sign in first");
@@ -172,6 +180,9 @@ const Item = (props) => {
                 quantity : increment(1)
             }) 
             setQuantity(quantity+1)
+            console.log(cartTotal);
+            const newt = cartTotal+1
+            setCartTotal(newt);
         }catch(err) {
             console.error(err)
         }
@@ -255,7 +266,7 @@ const Item = (props) => {
                 <span className='text-white font-medium text-sm'>Add To Cart </span>
                 </button>
                 :
-                <div className='hidden sm:block mt-2 w-full flex justify-between items-center'>
+                <div className='hidden sm:flex mt-2 w-full flex justify-between items-center'>
                     <div className="flex items-center border-gray-100">
                         <button className={`${quantity==1 ? "block": "hidden"} h-8 cursor-pointer rounded-l bg-blue-500 py-1 px-3.5 duration-100 hover:bg-blue-300`} onClick={deleteCartItem}> <TrashIcon className='text-white w-auto h-4'/> </button>
                         <button className={`${quantity>1 ? "block": "hidden"} text-white cursor-pointer rounded-l bg-blue-500 py-1 px-3.5 duration-100 hover:bg-blue-300`} onClick={decreaseQuantity}> - </button>

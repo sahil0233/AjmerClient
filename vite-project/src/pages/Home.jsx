@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import CategorySlider from '../components/CategorySlider';
 import { Carousel } from 'flowbite-react';
 import FooterComponent from '../components/FooterComponent';
 
 const Home = () => {
+
+    
+
   return (
     <div className='bg-gray-100'>
+
         <Navbar />
         <div className="mt-32 md:mt-[69px] h-28 lg:h-60 xl:h-80 2xl:h-96">
           <Carousel indicators={false} leftControl=" " rightControl=" ">
