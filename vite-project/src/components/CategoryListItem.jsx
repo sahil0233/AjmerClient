@@ -10,7 +10,7 @@ const CategoryListItem = (props) => {
     const navigate = useNavigate();
 
   return (
-    <div className={`${isOpen ? "bg-gray-200" : ""} pt-4 px-2 flex justify-between`}>
+    <div className={`${isOpen ? "bg-gray-200" : ""} py-6 px-2 flex justify-between`}>
         <div className=''>
             <h1 className='text-md font-medium'>{props.categoryDisplayName}</h1>
             <div>

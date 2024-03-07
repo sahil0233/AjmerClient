@@ -163,9 +163,9 @@ const Navbar = () => {
                 </button>
             </div>
         </div>
-        <div className={`lg:hidden navbar-menu relative z-50 ${isOpen? "": "hidden"}`}>
-            <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25" onClick={toggleMenu}></div>
-            <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 bg-white border-r overflow-y-auto">
+        {/* <div className={`lg:hidden navbar-menu relative z-50 ${isOpen? "": "hidden"}`}> */}
+            {/* <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25" onClick={toggleMenu}></div> */}
+            <nav className={`${isOpen? "transition-[left] duration-500 left-[0px]": "left-[-100%] transition-[left] duration-300"} md:hidden  fixed top-0 bottom-0 flex flex-col w-full py-6 bg-white border-r overflow-y-auto`}>
                 <div className="flex items-center mb-8">
                     <button className="navbar-close pl-2" onClick={toggleMenu}>
                         <svg className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -174,9 +174,9 @@ const Navbar = () => {
                     </button>
                 </div>
                 <div>
-                    <ul className='gap-4'>
+                    <ul className=''>
                         {categories && categories.map((category,idx) => (
-                        <li className=" border-b border-gray-400" key={idx}>
+                        <li className="  border-b border-gray-400" key={idx}>
                             <CategoryListItem categoryName={category.name} categoryDisplayName ={category.displayName} subCategories = {category.subcategories} />
                         </li>
                     ))}
@@ -193,7 +193,7 @@ const Navbar = () => {
                     </p>
                 </div>
             </nav>
-        </div>
+        {/* </div> */}
         <RegisterModal setModal = {setModal} modal={modal} />
         
     </div>
