@@ -12,8 +12,7 @@ const CartIcon = () => {
 
     useEffect(() => {
         getCartTotal();
-        console.log(cartTotal);
-    },[cartTotal])
+    },[])
 
     const getCartTotal = async() => {
         const q = query(collection(firestore, "carts"), where("userId", "==",localStorage.getItem("userId")));

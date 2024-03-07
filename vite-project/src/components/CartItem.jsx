@@ -11,6 +11,8 @@ const CartItem = (props) => {
     const [quantity, setQuantity] = useState(props.product.quantity)
     const navigate = useNavigate();
     const [cartTotal, setCartTotal] = useRecoilState(cartTotalAtom);
+    console.log(props.product.productTitle);
+    console.log(props.product.quantity)
 
     const handleEditClick = () => {
     setEditable(true);
@@ -58,7 +60,7 @@ const CartItem = (props) => {
             const docDel = doc(firestore,"carts", currdoc.id, "items", itemDoc.docs[0].id)
                 await deleteDoc(docDel)
                 setCartTotal(cartTotal-quantity);
-                setQuantity(0);
+                // setQuantity(0);
                 props.deletedCartItem(props.index);
         }catch(err){
             console.error(err)

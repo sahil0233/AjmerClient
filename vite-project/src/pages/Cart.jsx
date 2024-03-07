@@ -51,6 +51,7 @@ const cart = () => {
 
   const deletedCartItem = (index) => {
         const updatedCartItems = cartItems.filter((item, currentIndex) => currentIndex !== index);
+        console.log(updatedCartItems)
         setCartItems(updatedCartItems)
   }
 

@@ -103,7 +103,7 @@ const RegisterModal = (props) => {
   return (
     <div className={` ${props.modal?"":"hidden"} bg-opacity-60 h-screen w-screen absolute bg-black text-gray-900 flex flex-row justify-center items-center`}>
     {loading && <Loader />}
-    <div className="max-w-screen-md h-5/6 max-h-[768px]   bg-white shadow sm:rounded-lg flex justify-center flex-1 mx-12">
+    <div className="max-w-screen-md h-5/6 max-h-[768px]   bg-white shadow sm:rounded-lg flex justify-center flex-1 mx-2 sm:mx-12">
         <div className="flex-1 bg-contain bg-no-repeat bg-center bg-[url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg')] text-center hidden lg:flex">
         </div>
         {showOtpInput?
