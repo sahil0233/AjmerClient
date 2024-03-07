@@ -15,6 +15,7 @@ const CartItem = (props) => {
     console.log(props.product.quantity)
 
     const handleEditClick = () => {
+    setCartTotal(cartTotal-parseInt(quantity))
     setEditable(true);
     };
 
