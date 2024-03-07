@@ -35,7 +35,7 @@ const CartItem = (props) => {
                 quantity : quantity
             }) 
             props.updateCart(props.index,quantity);
-            setCartTotal(cartTotal+quantity);
+            setCartTotal(cartTotal+parseInt(quantity));
         }catch(err) {
             console.error(err)
         }
