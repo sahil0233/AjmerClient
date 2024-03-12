@@ -97,7 +97,7 @@ const AddProduct = () => {
 
         let imgUrls=[];
         for(let i=0;i<image.length ;i++){
-            const imgRef = ref(storage, `product-images/${image[i].name}` );
+            const imgRef = ref(storage, `product-images/${selectedCategory}/${image[i].name}` );
             await uploadBytes(imgRef, image[i]);
             const url = await getDownloadURL(imgRef);
             imgUrls.push(url);

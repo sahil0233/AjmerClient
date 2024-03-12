@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import CategorySlider from '../components/CategorySlider';
 import { Carousel } from 'flowbite-react';
 import FooterComponent from '../components/FooterComponent';
+import CategoryBanner from '../components/CategoryBanner';
 
 const Home = () => {
 
@@ -12,26 +13,44 @@ const Home = () => {
     <div className='bg-gray-100'>
 
         <Navbar />
-        <div className="max-w-11/12 mt-32 md:mt-[69px] h-20 lg:h-60 xl:h-80 2xl:h-[500px]">
+        <CategoryBanner />
+        <div className="max-w-11/12 mt-32 md:mt-[120px] h-24 lg:h-60 xl:h-80 2xl:h-[300px]">
           <Carousel indicators={false} leftControl=" " rightControl=" ">
-            <img  src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F1mar24-crsl-dgr-ds.jpg&w=3840&q=75" alt="..." />
-            <img src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F2024-dgr-03-dg.jpg&w=3840&q=75" alt="..." />
-            <img src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F6june22-crsl-delivery-dgr1.jpg&w=3840&q=75" alt="..." />
-            <img src="https://www.dmart.in/_next/image?url=https%3A%2F%2Fcdn.dmart.in%2Fimages%2Frwd%2Fbanners%2Fhmpg%2F1mar24-crsl-dgr-skincare.jpg&w=3840&q=75" alt="..." />
+            <img className='h-full'  src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F1.jpg?alt=media&token=30371cb2-2277-4456-a6df-b3e23f62ace4" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F2.jpg?alt=media&token=55533a62-7aed-4550-b1bb-81d989381111" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F3.png?alt=media&token=10e5a6d2-f280-4f05-9256-3f6787a93c40" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F4.jpg?alt=media&token=b26c48e8-5df8-40e2-81f3-a4a2f287f85a" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F5.png?alt=media&token=ca31a388-43cb-4254-b64a-83a8b5cf6efe" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F6.jpeg?alt=media&token=af4ebf09-eead-4339-8499-e0362f430034" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F7.jpeg?alt=media&token=ad75d0a2-a17f-4d58-ad0a-b68923f42479" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F8.png?alt=media&token=52f0419d-e4d1-4a4d-8a21-eed0852c8c87" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F9.jpeg?alt=media&token=2bebf3b7-8fd7-4920-8f6b-a8522d46e77c" alt="..." />
+            
           </Carousel>
         </div>
         <div className='relative mt-40 bg-white mt-8 md:mt-12 lg:mt-20 border-2 rounded-md py-2 px-4 w-11/12 mx-auto'>
         <CategorySlider />
         </div>
 
-        <div className='mt-4 sm:mt-6 w-11/12 mx-auto p-1 sm:p-2 md:p-6 border-2 rounded-md bg-white'>
-        <img src='https://cdn.dmart.in/images/rwd/banners/curated/1mar24-curated-dgr-de.jpg' />
+        <div className='mt-4 sm:mt-6 w-11/12 h-24  sm:h-[300px] mx-auto p-1 sm:p-2 md:p-6 border-2 rounded-md bg-white'>
+          <Carousel indicators={false} leftControl=" " rightControl=" ">
+            <img className='h-full'  src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F10.jpeg?alt=media&token=552c85f3-51eb-4bcd-a1f3-ed4c40cea3fb" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F11.jpg?alt=media&token=edca1043-ffa0-4513-9b73-2d9e8b7ed6f1" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F12.jpeg?alt=media&token=0c008f80-b862-4a8d-90e9-dbc6bf61e1a3" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F13.jpeg?alt=media&token=c65dd4d1-9987-4a4c-974f-35bbec6bce8e" alt="..." />
+            
+          </Carousel>
         </div>
 
-        <div className='mt-4 sm:mt-6 w-11/12 mx-auto p-1 sm:p-2 md:p-6 border-2 rounded-md bg-white mb-4 md:mb-10'>
-        <img src='https://cdn.dmart.in/images/rwd/banners/curated/1jan24-curated-dgr-bmh.jpg' />
+        <div className='mt-4 mb-6 sm:mb-12 sm:mt-6 w-11/12 h-24  sm:h-[300px] mx-auto p-1 sm:p-2 md:p-6 border-2 rounded-md bg-white'>
+          <Carousel indicators={false} leftControl=" " rightControl=" ">
+            <img className='h-full'  src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F15.jpeg?alt=media&token=8f523e95-0596-456e-81ad-93e3764225ec" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F16.jpeg?alt=media&token=776e8182-dfb0-42fe-aa97-7dd5869beccd" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F17.jpeg?alt=media&token=ffd3d23d-47bc-4d93-b8c5-9f8716ced90c" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F18.jpeg?alt=media&token=9fa52f95-3823-4dc8-8c73-083e547640f1" alt="..." />
+            
+          </Carousel>
         </div>
-        
         <FooterComponent />
     </div>
   )

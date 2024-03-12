@@ -2,16 +2,18 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import CategoryListItem from './CategoryListItem';
 import RegisterModal from './RegisterModal';
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, MapPinIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { collection, getDocs, query , where} from 'firebase/firestore';
 import { firestore } from '../firebase/FirebaseConfig';
 import { useNavigate } from 'react-router-dom';
 import { getAuth,signOut } from 'firebase/auth';
 import CartIcon from './CartIcon';
+import LocationModal from './LocationModal';
 
 const Navbar = () => {
 
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpenLocationModal, setIsOpenLocationModal] = useState(false);
     const [searchIterm, setSearchIterm] = useState("");
     const [modal, setModal] = useState(false);
 
@@ -74,24 +76,31 @@ const Navbar = () => {
 
   return (
     <div className='h-[69px] flex flex-col border-b shadow-md fixed bg-white top-0 w-full z-10'>
-        <nav className="w-full relative px-4 py-4 flex flex-row justify-between items-center bg-white">
-            <div className="md:hidden">
-                <button className="navbar-burger flex items-center text-blue-600 p-3" onClick={toggleMenu}>
+        <nav className="w-full h-full relative px-4 grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 space-x-4 content-center bg-white">
+            <div className="col-span-1 flex">
+                <button className="md:hidden navbar-burger flex items-center text-blue-600 p-3" onClick={toggleMenu}>
                     <svg className="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <title>Mobile menu</title>
                         <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
                     </svg>
                 </button>
-            </div>
-            <a className="text-3xl font-bold leading-none cursor-pointer" onClick={() => {navigate("/")}}>
+            <a className="flex items-center text-3xl font-bold leading-none cursor-pointer" onClick={() => {navigate("/")}}>
                 <img className='h-8 w-auto' src='https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2Fmartlogo.jpeg?alt=media&token=ee6e2494-2792-4ff4-9219-f9de328d566f' />
             </a>
-            <ul className={`w-2/5 max-w-2xl hidden md:inline-flex absolute top-3/4 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:space-x-6`}>
-                <li className="mb-3 w-full">
-                    <div className="relative mb-4 flex w-full flex-wrap items-stretch">
+            </div>
+            <button className='col-span-1 w-max px-1 md:px-4 flex flex-col items-center justify-evenly bg-indigo-50 rounded-br-2xl rounded-tl-2xl py-2'
+            onClick={() =>{setIsOpenLocationModal(true)}}
+            >
+            
+            <h2 className='space-x-1 md:space-x-2 flex items-center'><MapPinIcon className='w-4 inline-block text-green-500' /><span className='text-xs md:text-md'>302017</span> <ChevronDownIcon className='w-4 inline-block ' /></h2>
+            <p className=' text-xs md:text-md text-gray-500 font-medium'>Jaipur</p>
+            </button>
+            {/* local modal */}
+            {isOpenLocationModal && <LocationModal isOpenLocationModal= {isOpenLocationModal} setIsOpenLocationModal={setIsOpenLocationModal} />}
+            <div className="hidden col-span-3 relative md:flex w-full flex-wrap items-center">
                         <input
                         type="search"
-                        className="relative m-0 -mr-0.5 block min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-gray-200 bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-black dark:placeholder:text-gray-400 dark:focus:border-primary"
+                        className="relative h-10 m-0 -mr-0.5 block min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-gray-200 bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-black dark:placeholder:text-gray-400 dark:focus:border-primary"
                         placeholder="Apko kya chahiye?"
                         aria-label="Search"
                         aria-describedby="button-addon1"
@@ -99,7 +108,7 @@ const Navbar = () => {
                         onKeyDown={(e) => {e.key==='Enter'?navigate(`/search?searchItem=${searchIterm}`):""}}
                         onChange={(e) => {setSearchIterm(e.target.value)}} />
                         <button
-                        className="relative z-[2] flex items-center rounded-r bg-blue-500 hover:scale-105 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
+                        className="relative h-10 z-[2] flex items-center rounded-r bg-blue-500 hover:scale-105 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
                         type="button"
                         id="button-addon1"
                         data-te-ripple-init
@@ -118,21 +127,21 @@ const Navbar = () => {
                             clipRule="evenodd" />
                         </svg>
                         </button>
-                    </div>
-                </li>
-            </ul>
-            <div className='flex justify-center items-center'>
+            </div>
+            <div className='hidden sm:block md:hidden col-span-1'></div>
+            
+            <div className='col-span-1 sm:col-span-2 flex justify-evenly items-center'>
             
             {localStorage.getItem("userId") ==null ? 
-            <button className="lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 text-xs  sm:text-sm text-gray-900 font-bold hover:underline" onClick={() =>{setModal(true)}}>Sign In/Register</button>
-            : <button className="lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 text-xs sm:text-sm text-gray-900 font-bold hover:underline" onClick={logOut}>Logout</button>}
+            <button className="lg:inline-block py-2 px-6 text-xs  sm:text-sm text-gray-900 font-bold hover:underline" onClick={() =>{setModal(true)}}>Sign In/Register</button>
+            : <button className="lg:inline-block py-2 px-6 text-xs sm:text-sm text-gray-900 font-bold hover:underline" onClick={logOut}>Logout</button>}
             <CartIcon />
             </div>
             {/* onClick={() => setOpen(true)} */}
             {/* <SideCart open={open} setOpen={setOpen}/> */}
 
         </nav>
-        <div className="md:hidden mb-3 px-2 w-full self-center bg-white">
+        <div className="md:hidden m-3 px-2 w-full self-center bg-white">
             <div className="relative mb-4 flex w-full flex-wrap items-stretch">
                 <input
                 type="search"
@@ -165,7 +174,8 @@ const Navbar = () => {
         </div>
         {/* <div className={`lg:hidden navbar-menu relative z-50 ${isOpen? "": "hidden"}`}> */}
             {/* <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25" onClick={toggleMenu}></div> */}
-            <nav className={`${isOpen? "transition-[left] duration-500 left-[0px]": "left-[-100%] transition-[left] duration-300"} md:hidden  fixed top-0 bottom-0 flex flex-col w-full py-6 bg-white border-r overflow-y-auto`}>
+            {/* mobile menu */}
+            <nav className={`${isOpen? "transition-[left] duration-500 left-[0px]": "left-[-100%] transition-[left] duration-300"} md:hidden  fixed top-0 bottom-0 w-full py-6 bg-white border-r overflow-y-auto`}>
                 <div className="flex items-center mb-8">
                     <button className="navbar-close pl-2" onClick={toggleMenu}>
                         <svg className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

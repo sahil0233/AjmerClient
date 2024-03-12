@@ -40,17 +40,20 @@ const getAllSubcategories = async (categoryName) => {
 
   // Start fetching subcategories recursively
   await fetchSubcategories(categoryName);
+ 
 
   return subcategories;
 };
 
 const getAllProducts = async(categoryName) => {
   let subcategories = await getAllSubcategories(categoryName);
+   console.log(subcategories)
   if(subcategories.length>0){
   const prodRef = collection(firestore,"products");
-  const q = query(prodRef, where("category","in",subcategories));
+  const q = query(prodRef, where("category","in",[...subcategories]));
   const querySnapshot = await getDocs(q);
   const newData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  console.log(newData)
     setProducts(newData);
   }
   setLoading(false);

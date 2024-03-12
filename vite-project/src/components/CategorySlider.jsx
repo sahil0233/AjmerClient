@@ -74,16 +74,16 @@ const CategorySlider = () => {
 
   return (
     <div className='w-full py-4'>
-        <div className='left-0 w-full px-4 md:px-6 absolute flex top-1/2 transform -translate-y-1/2 justify-between'>
+        <div className='left-0 w-full px-4 md:px-6 absolute flex top-1/2 transform -translate-y-1/2 justify-between z-10'>
           <ChevronLeftIcon className=' h-5 md:h-7 w-auto cursor-pointer' onClick={() => slider?.current?.slickPrev()} />
           <ChevronRightIcon className='h-5 md:h-7 w-auto cursor-pointer' onClick={() => slider?.current?.slickNext()} />
           </div>
         <Slider ref={slider} {...settings}>
           
             {categories && categories.map((c,i) => (
-                <div className=' flex items-center justify-center text-black cursor-pointer' >
-                    <img className=' h-14 md:h-24 lg:h-28 mx-auto  border rounded-xl p-4' src={imgPaths[i]} onClick={() => { navigate(`/category/${c.name}-aesc-${c.displayName}`)}} />
-                        <p className='flex justify-center items-center text-xs md:text-sm font-medium text-center' onClick={() => { navigate(`/category/${c.name}-aesc-${c.displayName}`)}}>{c.displayName}</p>
+                <div className=' flex items-center justify-center text-black' >
+                    <img className=' h-14 md:h-24 lg:h-28 mx-auto  border rounded-xl p-4 cursor-pointer' src={imgPaths[i]} onClick={() => { navigate(`/category/${c.name}-aesc-${c.displayName}`)}} />
+                        <p className='flex justify-center items-center text-xs md:text-sm font-medium text-center cursor-pointer' onClick={() => { navigate(`/category/${c.name}-aesc-${c.displayName}`)}}>{c.displayName}</p>
                     
                 </div>
             ))}

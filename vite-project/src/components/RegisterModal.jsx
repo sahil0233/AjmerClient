@@ -51,7 +51,7 @@ const RegisterModal = (props) => {
             console.log(e);
             window.recaptchaVerifier.recaptcha.reset();
             window.recaptchaVerifier.clear();
-            alert("Something went wrong! Contact administrator if situation persists")
+            alert("Please write your phone number without spaces. Eg. 999xxxxxxx")
         }
     }
 

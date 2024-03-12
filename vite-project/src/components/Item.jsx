@@ -33,8 +33,6 @@ const Item = (props) => {
     }
 
     const getQuantity = async(variationid) => {
-        console.log(variationid);
-        console.log(props.id);
         const cartRef = collection(firestore, 'carts');
             const q = query(cartRef, where("userId", "==", localStorage.getItem('userId')));
             const querySnapshot = await getDocs(q);
@@ -61,7 +59,6 @@ const Item = (props) => {
         }
         }
         setSelectedVariant(variations[i]);
-        console.log(variations[i].variationId)
         getQuantity(variations[i].variationId);
     };
 
@@ -93,9 +90,9 @@ const Item = (props) => {
 
             }
             else {
-                console.log("inside else")
+                
                 const currdoc = querySnapshot.docs[0];
-                console.log(currdoc.id);
+                
                 const existingItemsCollection = collection(firestore, 'carts', currdoc.id, "items");
                 const itemRef = await addDoc(existingItemsCollection, {
                             productId : props.id,
@@ -126,13 +123,13 @@ const Item = (props) => {
         const cartRef = collection(firestore, 'carts');
             const q = query(cartRef, where("userId", "==", localStorage.getItem('userId')));
             const querySnapshot = await getDocs(q);
-            console.log();
+            
             const currdoc = querySnapshot.docs[0];
             const itemsCollection = collection(firestore,"carts",currdoc.id,"items");
-            console.log(currdoc.id)
+            
             const itemq = query(itemsCollection,where("productId","==",props.id),where("variantId","==",selectedVariant.variationId))
             const itemDoc = await getDocs(itemq);
-            console.log(itemDoc.docs[0].id);
+           
             const docDel = doc(firestore,"carts", currdoc.id, "items", itemDoc.docs[0].id)
                 await deleteDoc(docDel)
                 setCartTotal(cartTotal-quantity);
