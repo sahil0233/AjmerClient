@@ -76,7 +76,7 @@ const Navbar = () => {
     
 
   return (
-    <div className='sm:h-[100px] flex flex-col border-b shadow-md fixed bg-white top-0 w-full z-10'>
+    <div className='sm:h-[100px] flex flex-col border-b shadow-md absolute top-0 bg-white top-0 w-full z-10'>
         <nav className="w-full h-full px-4 grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 space-x-4 content-center bg-white md:border-b">
             <div className="col-span-1 flex">
                 <button className="md:hidden navbar-burger flex items-center text-blue-600 p-3" onClick={toggleMenu}>
