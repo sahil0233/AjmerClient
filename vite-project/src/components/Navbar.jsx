@@ -77,7 +77,7 @@ const Navbar = () => {
 
   return (
     <div className='sm:h-[100px] flex flex-col border-b shadow-md fixed bg-white top-0 w-full z-10'>
-        <nav className="w-full h-full relative px-4 grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 space-x-4 content-center bg-white md:border-b">
+        <nav className="w-full h-full px-4 grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 space-x-4 content-center bg-white md:border-b">
             <div className="col-span-1 flex">
                 <button className="md:hidden navbar-burger flex items-center text-blue-600 p-3" onClick={toggleMenu}>
                     <svg className="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -99,10 +99,10 @@ const Navbar = () => {
             </button> */}
             {/* local modal */}
             {/* {isOpenLocationModal && <LocationModal isOpenLocationModal= {isOpenLocationModal} setIsOpenLocationModal={setIsOpenLocationModal} />} */}
-            <div className="hidden col-span-3 relative md:flex w-full flex-wrap items-center">
+            <div className="hidden col-span-3 md:flex w-full flex-wrap items-center">
                         <input
                         type="search"
-                        className="relative h-10 m-0 -mr-0.5 block min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-gray-200 bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-black dark:placeholder:text-gray-400 dark:focus:border-primary"
+                        className=" h-10 m-0 -mr-0.5 block min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-gray-200 bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-black dark:placeholder:text-gray-400 dark:focus:border-primary"
                         placeholder="Apko kya chahiye?"
                         aria-label="Search"
                         aria-describedby="button-addon1"
@@ -110,7 +110,7 @@ const Navbar = () => {
                         onKeyDown={(e) => {e.key==='Enter'?navigate(`/search?searchItem=${searchIterm}`):""}}
                         onChange={(e) => {setSearchIterm(e.target.value)}} />
                         <button
-                        className="relative h-10 z-[2] flex items-center rounded-r bg-blue-500 hover:scale-105 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
+                        className=" h-10 z-[2] flex items-center rounded-r bg-blue-500 hover:scale-105 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
                         type="button"
                         id="button-addon1"
                         data-te-ripple-init
@@ -144,10 +144,10 @@ const Navbar = () => {
 
         </nav>
         <div className="md:hidden mt-3 px-2 w-full self-center bg-white">
-            <div className="relative mb-4 flex w-full flex-wrap items-stretch">
+            <div className=" mb-4 flex w-full flex-wrap items-stretch">
                 <input
                 type="search"
-                className="relative m-0 -mr-0.5 block min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-gray-200 bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-black dark:placeholder:text-gray-400 dark:focus:border-primary"
+                className=" m-0 -mr-0.5 block min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-gray-200 bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-black dark:placeholder:text-gray-400 dark:focus:border-primary"
                 placeholder="Apko kya chahiye?"
                 aria-label="Search"
                 aria-describedby="button-addon1" 
@@ -155,7 +155,7 @@ const Navbar = () => {
                 onChange={(e) => {setSearchIterm(e.target.value)}}
                 />
                 <button
-                className="relative flex items-center rounded-r bg-blue-500 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-400 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
+                className=" flex items-center rounded-r bg-blue-500 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-400 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
                 type="button"
                 id="button-addon1"
                 data-te-ripple-init
