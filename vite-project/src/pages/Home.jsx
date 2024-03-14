@@ -13,8 +13,7 @@ const Home = () => {
     <div className='bg-gray-100'>
 
         <Navbar />
-        <CategoryBanner />
-        <div className="max-w-11/12 mt-32 md:mt-[120px] h-24 lg:h-60 xl:h-80 2xl:h-[300px]">
+        <div className="max-w-11/12 mt-28 md:mt-[100px] h-44 lg:h-60 xl:h-80 2xl:h-[300px]">
           <Carousel indicators={false} leftControl=" " rightControl=" ">
             <img className='h-full'  src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F1.jpg?alt=media&token=30371cb2-2277-4456-a6df-b3e23f62ace4" alt="..." />
             <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F2.jpg?alt=media&token=55533a62-7aed-4550-b1bb-81d989381111" alt="..." />

@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAuth,signOut } from 'firebase/auth';
 import CartIcon from './CartIcon';
 import LocationModal from './LocationModal';
+import CategoryBanner from './CategoryBanner';
 
 const Navbar = () => {
 
@@ -52,16 +53,16 @@ const Navbar = () => {
             const data = doc.data();
             const subcategories = [];
 
-            const q2 = query(categoriesRef, where("parent", "==", data.name));
+            const q2 = query(categoriesRef, where("parent", "==", doc.id));
             const subcategorySnapshot = await getDocs(q2);
             subcategorySnapshot.forEach((doc) => {
                 const subcategoryData = doc.data();
-                subcategories.push({subcategoryDisplayName :subcategoryData.displayName, subcategoryName :subcategoryData.name });
+                subcategories.push({subcategoryDisplayName :subcategoryData.displayName, subcategoryName :doc.id });
             });
 
             catObj.push({
                 displayName : data.displayName,
-                name: data.name,
+                name: doc.id,
                 subcategories: subcategories
             });
         }));
@@ -75,8 +76,8 @@ const Navbar = () => {
     
 
   return (
-    <div className='h-[69px] flex flex-col border-b shadow-md fixed bg-white top-0 w-full z-10'>
-        <nav className="w-full h-full relative px-4 grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 space-x-4 content-center bg-white">
+    <div className='sm:h-[100px] flex flex-col border-b shadow-md fixed bg-white top-0 w-full z-10'>
+        <nav className="w-full h-full relative px-4 grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 space-x-4 content-center bg-white md:border-b">
             <div className="col-span-1 flex">
                 <button className="md:hidden navbar-burger flex items-center text-blue-600 p-3" onClick={toggleMenu}>
                     <svg className="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -88,15 +89,16 @@ const Navbar = () => {
                 <img className='h-8 w-auto' src='https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2Fmartlogo.jpeg?alt=media&token=ee6e2494-2792-4ff4-9219-f9de328d566f' />
             </a>
             </div>
-            <button className='col-span-1 w-max px-1 md:px-4 flex flex-col items-center justify-evenly bg-indigo-50 rounded-br-2xl rounded-tl-2xl py-2'
+            <div className='col-span-1'></div>
+            {/* <button className='col-span-1 w-max px-1 md:px-4 flex flex-col items-center justify-evenly bg-indigo-50 rounded-br-2xl rounded-tl-2xl py-2'
             onClick={() =>{setIsOpenLocationModal(true)}}
             >
             
             <h2 className='space-x-1 md:space-x-2 flex items-center'><MapPinIcon className='w-4 inline-block text-green-500' /><span className='text-xs md:text-md'>302017</span> <ChevronDownIcon className='w-4 inline-block ' /></h2>
             <p className=' text-xs md:text-md text-gray-500 font-medium'>Jaipur</p>
-            </button>
+            </button> */}
             {/* local modal */}
-            {isOpenLocationModal && <LocationModal isOpenLocationModal= {isOpenLocationModal} setIsOpenLocationModal={setIsOpenLocationModal} />}
+            {/* {isOpenLocationModal && <LocationModal isOpenLocationModal= {isOpenLocationModal} setIsOpenLocationModal={setIsOpenLocationModal} />} */}
             <div className="hidden col-span-3 relative md:flex w-full flex-wrap items-center">
                         <input
                         type="search"
@@ -141,7 +143,7 @@ const Navbar = () => {
             {/* <SideCart open={open} setOpen={setOpen}/> */}
 
         </nav>
-        <div className="md:hidden m-3 px-2 w-full self-center bg-white">
+        <div className="md:hidden mt-3 px-2 w-full self-center bg-white">
             <div className="relative mb-4 flex w-full flex-wrap items-stretch">
                 <input
                 type="search"
@@ -187,7 +189,7 @@ const Navbar = () => {
                     <ul className=''>
                         {categories && categories.map((category,idx) => (
                         <li className="  border-b border-gray-400" key={idx}>
-                            <CategoryListItem categoryName={category.name} categoryDisplayName ={category.displayName} subCategories = {category.subcategories} />
+                            <CategoryListItem toggleMenu={toggleMenu} categoryName={category.name} categoryDisplayName ={category.displayName} subCategories = {category.subcategories} />
                         </li>
                     ))}
                     </ul>
@@ -205,6 +207,8 @@ const Navbar = () => {
             </nav>
         {/* </div> */}
         <RegisterModal setModal = {setModal} modal={modal} />
+
+        <CategoryBanner />
         
     </div>
   )

@@ -11,12 +11,10 @@ const ProductGrid = (props) => {
 
     useEffect(() =>  {
       setLoading(true);
-      if(props.subcategoryName.length > 0){
-        getAllProducts(props.subcategoryName)
-      }else{
+      
      getAllProducts(props.selectedCategory);
-      }
-},[props.selectedCategory, props.subcategoryName]);
+      
+},[props.selectedCategory]);
 
 const getAllSubcategories = async (categoryName) => {
   // Array to store subcategories
@@ -24,36 +22,36 @@ const getAllSubcategories = async (categoryName) => {
 
   // Function to fetch subcategories recursively
   const fetchSubcategories = async (parent) => {
+    if(parent !=null){
     const categoriesRef = collection(firestore,"categories");
     const q = query(categoriesRef, where("parent","==",parent));
     const querySnapshot = await getDocs(q);
+  if(querySnapshot.docs.length>0){
+    const promises = querySnapshot.docs.map(async (doc) => {
+        const categoryData = doc.data();
+        const category = doc.id;
+        subcategories.push(category);
 
-    querySnapshot.forEach((doc) => {
-      const categoryData = doc.data();
-      const categoryName = categoryData.name;
-      subcategories.push(categoryName);
-
-      // Recursively fetch subcategories
-      fetchSubcategories(categoryName);
-    });
+        // Recursively fetch subcategories
+        await fetchSubcategories(category);
+      });
+    await Promise.all(promises);
+  }
+  }
   };
 
   // Start fetching subcategories recursively
   await fetchSubcategories(categoryName);
- 
-
   return subcategories;
 };
 
 const getAllProducts = async(categoryName) => {
   let subcategories = await getAllSubcategories(categoryName);
-   console.log(subcategories)
   if(subcategories.length>0){
   const prodRef = collection(firestore,"products");
   const q = query(prodRef, where("category","in",[...subcategories]));
   const querySnapshot = await getDocs(q);
   const newData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  console.log(newData)
     setProducts(newData);
   }
   setLoading(false);

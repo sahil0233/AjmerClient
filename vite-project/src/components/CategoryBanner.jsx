@@ -3,7 +3,7 @@ import React from 'react'
 
 const CategoryBanner = () => {
   return (
-    <div className='hidden w-full fixed top-[69px] z-10 bg-white h-12 md:grid gap-6 grid-cols-5 border-t shadow-md'>
+    <div className='w-full bg-white p-2 hidden md:grid gap-6 grid-cols-5'>
     <div className='ml-4 h-full col-span-1 flex items-center gap-2 border-r'>
         <Bars3Icon className='w-5' />
         <p className='text-md font-normal text-gray-600'>All Categories</p>

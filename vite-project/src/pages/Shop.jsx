@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import Item from '../components/Item'
 import Sidebar from '../components/Sidebar'
 import FooterComponent from '../components/FooterComponent'
+import CategoryBanner from '../components/CategoryBanner'
 
 const Shop = () => {
   return (

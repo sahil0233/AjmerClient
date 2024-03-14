@@ -43,7 +43,7 @@ const Search = () => {
   return (
     <div className='min-h-screen flex flex-col justify-between'>
       <Navbar />
-      <div className='md:mx-12 lg:mx-24 mt-32 md:mt-[76px]'>
+      <div className='md:mx-12 lg:mx-24 mt-32 md:mt-[120px]'>
         <h1 className='ml-8 flex gap-4'><p className='text-black font-medium text-sm md:text-3xl'>Search results</p> <span className='text-gray-400 font-normal text-sm md:text-lg flex items-end'>Showing {products.length} results for "{searchItem}"</span></h1>
         <section className=" w-full px-2 auto-cols-auto xl:pr-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-items-center justify-center gap-y-10 sm:gap-y-20 gap-x-4 mt-10 mb-5">
                   {products.map((item,index) => (

@@ -17,7 +17,9 @@ const CategoryListItem = (props) => {
                 {isOpen?
                     <ul className='pl-6 pt-4 space-y-2'>
                         {props.subCategories.map(cat =>(
-                            <li className='text-gray-500' onClick={() => {navigate(`/category/${props.categoryName}-aesc-${props.categoryDisplayName}?subcategoryName=${cat.subcategoryName}`)}}>{cat.subcategoryDisplayName}</li>
+                            <li className='text-gray-500' onClick={() => {
+                                props.toggleMenu()
+                                navigate(`/category/${cat.subcategoryName}-aesc-${cat.subcategoryDisplayName}`)}}>{cat.subcategoryDisplayName}</li>
                         ))}
                     </ul>:
                     <h2 className=' w-40 whitespace-nowrap overflow-hidden overflow-ellipsis'>{props.subCategories.map(c => c.subcategoryDisplayName).join(', ')}</h2>

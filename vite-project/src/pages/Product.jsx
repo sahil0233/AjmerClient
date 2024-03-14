@@ -3,6 +3,7 @@ import { useState,Fragment, useEffect } from 'react';
 import { RadioGroup, Tab } from '@headlessui/react';
 import { CheckIcon, TrashIcon } from '@heroicons/react/20/solid'
 import Navbar from '../components/Navbar';
+import CategoryBanner from '../components/CategoryBanner';
 import { firestore } from '../firebase/FirebaseConfig';
 import { doc,documentId, getDoc,query,where,collection, getDocs, addDoc, arrayUnion, updateDoc, increment, deleteDoc } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
