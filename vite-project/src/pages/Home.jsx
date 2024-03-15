@@ -27,26 +27,32 @@ const Home = () => {
             
           </Carousel>
         </div>
-        <div className='relative mt-40 bg-white mt-8 md:mt-12 lg:mt-20 border-2 rounded-md py-2 px-4 w-11/12 mx-auto'>
+        <div className='relative mt-40 bg-white mt-8 md:mt-12 lg:mt-10 border-2 rounded-md py-2 px-4 w-11/12 mx-auto'>
         <CategorySlider />
         </div>
 
-        <div className='mt-4 sm:mt-6 w-11/12 h-24  sm:h-[300px] mx-auto p-1 sm:p-2 md:p-6 border-2 rounded-md bg-white'>
+        <div className='mt-4 sm:mt-6 w-11/12 mx-auto p-1 sm:p-2 md:p-6 border-2 rounded-md bg-white'>
+            <img className='w-full'  src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F10.jpeg?alt=media&token=552c85f3-51eb-4bcd-a1f3-ed4c40cea3fb" alt="..." />
+        </div>
+
+        <div className='mt-4 sm:mt-6 w-11/12 mx-auto p-1 sm:p-2 md:p-6 border-2 rounded-md bg-white'>
+            <img className='w-full'  src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F15.jpeg?alt=media&token=8f523e95-0596-456e-81ad-93e3764225ec" alt="..." />
+        </div>
+
+        <div className='mt-4 sm:mt-6 w-11/12 mx-auto p-1 sm:p-2 md:p-6 border-2 rounded-md bg-white'>
+            <img className='w-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F16.jpeg?alt=media&token=776e8182-dfb0-42fe-aa97-7dd5869beccd" alt="..." />
+        </div>
+
+        <div className='mt-4 sm:mt-6 w-11/12 mx-auto p-1 sm:p-2 md:p-6 border-2 rounded-md bg-white'>
+            <img className='w-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F17.jpeg?alt=media&token=ffd3d23d-47bc-4d93-b8c5-9f8716ced90c" alt="..." />
+        </div>
+
+        <div className='my-4 sm:mt-6 w-11/12 h-[150px] mx-auto p-1 sm:p-2 md:p-6 border-2 rounded-md bg-white'>
           <Carousel indicators={false} leftControl=" " rightControl=" ">
-            <img className='h-full'  src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F10.jpeg?alt=media&token=552c85f3-51eb-4bcd-a1f3-ed4c40cea3fb" alt="..." />
+            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F18.jpeg?alt=media&token=9fa52f95-3823-4dc8-8c73-083e547640f1" alt="..." />
             <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F11.jpg?alt=media&token=edca1043-ffa0-4513-9b73-2d9e8b7ed6f1" alt="..." />
             <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F12.jpeg?alt=media&token=0c008f80-b862-4a8d-90e9-dbc6bf61e1a3" alt="..." />
             <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F13.jpeg?alt=media&token=c65dd4d1-9987-4a4c-974f-35bbec6bce8e" alt="..." />
-            
-          </Carousel>
-        </div>
-
-        <div className='mt-4 mb-6 sm:mb-12 sm:mt-6 w-11/12 h-24  sm:h-[300px] mx-auto p-1 sm:p-2 md:p-6 border-2 rounded-md bg-white'>
-          <Carousel indicators={false} leftControl=" " rightControl=" ">
-            <img className='h-full'  src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F15.jpeg?alt=media&token=8f523e95-0596-456e-81ad-93e3764225ec" alt="..." />
-            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F16.jpeg?alt=media&token=776e8182-dfb0-42fe-aa97-7dd5869beccd" alt="..." />
-            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F17.jpeg?alt=media&token=ffd3d23d-47bc-4d93-b8c5-9f8716ced90c" alt="..." />
-            <img className='h-full' src="https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2F18.jpeg?alt=media&token=9fa52f95-3823-4dc8-8c73-083e547640f1" alt="..." />
             
           </Carousel>
         </div>

@@ -19,6 +19,7 @@ const cart = () => {
     },[])
 
     const getCartItems = async() => {
+      console.log("inside get")
         const q = query(collection(firestore, "carts"), where("userId", "==",userId));
         const querySnapshot = await getDocs(q);
         if(!querySnapshot.empty){
@@ -30,8 +31,13 @@ const cart = () => {
                     docSnap.forEach((doc) => {
                     allItems.push({id: doc.id ,...doc.data()});
                     })
+                    console.log(allItems)
                     setCartItems(allItems);
                     
+                }else {
+                  console.log(cartItems);
+                  
+                  setCartItems(undefined);
                 }
         }
 
@@ -40,6 +46,7 @@ const cart = () => {
 
 
   const updateCart = (index,quantity) => {
+    console.log("update")
 
     setCartItems(prevCartItems => {
         const updatedCartItems = [...prevCartItems]; // Create a shallow copy of the cartItems array
@@ -47,12 +54,6 @@ const cart = () => {
         return updatedCartItems; // Set the updated array as the new state
     });
 
-  }
-
-  const deletedCartItem = (index) => {
-        const updatedCartItems = cartItems.filter((item, currentIndex) => currentIndex !== index);
-        console.log(updatedCartItems)
-        setCartItems(updatedCartItems)
   }
 
     
@@ -73,7 +74,7 @@ const cart = () => {
           </div>
           {cartItems.map((product,index) =>(
               <div className="flex flex-col rounded-lg md:w-full" key={index}>
-                  <CartItem product={product} index={index} updateCart={updateCart} deletedCartItem={deletedCartItem}/>
+                  <CartItem product={product} index={index} updateCart={updateCart} getCartItems={getCartItems}/>
                   
                   {/* <button className='text-red-600 w-full text-right'>Remove all</button> */}
               </div>

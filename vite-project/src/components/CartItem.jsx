@@ -1,6 +1,6 @@
 import { CheckCircleIcon, PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { collection, query, where, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import { firestore } from '../firebase/FirebaseConfig';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
@@ -8,11 +8,14 @@ import { cartTotalAtom } from '../store/atoms/totalCartQuantity';
 
 const CartItem = (props) => {
     const [editable, setEditable] = useState(false);
-    const [quantity, setQuantity] = useState(props.product.quantity)
+    const [quantity, setQuantity] = useState(0)
+    console.log(props.product.productTitle + "--"+ quantity)
     const navigate = useNavigate();
     const [cartTotal, setCartTotal] = useRecoilState(cartTotalAtom);
-    console.log(props.product.productTitle);
-    console.log(props.product.quantity)
+
+    useEffect(() => {
+        setQuantity(props.product.quantity);
+    },[props.product.quantity])
 
     const handleEditClick = () => {
     setCartTotal(cartTotal-parseInt(quantity))
@@ -51,18 +54,14 @@ const CartItem = (props) => {
         const cartRef = collection(firestore, 'carts');
             const q = query(cartRef, where("userId", "==", localStorage.getItem('userId')));
             const querySnapshot = await getDocs(q);
-            console.log();
             const currdoc = querySnapshot.docs[0];
             const itemsCollection = collection(firestore,"carts",currdoc.id,"items");
-            console.log(currdoc.id)
             const itemq = query(itemsCollection,where("productId","==",props.product.productId),where("variantId","==",props.product.variantId))
             const itemDoc = await getDocs(itemq);
-            console.log(itemDoc.docs[0].id);
             const docDel = doc(firestore,"carts", currdoc.id, "items", itemDoc.docs[0].id)
                 await deleteDoc(docDel)
                 setCartTotal(cartTotal-quantity);
-                // setQuantity(0);
-                props.deletedCartItem(props.index);
+                props.getCartItems()
         }catch(err){
             console.error(err)
         }

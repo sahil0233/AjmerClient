@@ -11,13 +11,13 @@ const CategoryListItem = (props) => {
 
   return (
     <div className={`${isOpen ? "bg-gray-200" : ""} py-6 px-2 flex justify-between`}>
-        <div className=''>
-            <h1 className='text-md font-medium'>{props.categoryDisplayName}</h1>
+        <div className='w-full'>
+            <h1 className='text-md font-medium cursor-pointer' onClick={toggleIsOpen}>{props.categoryDisplayName}</h1>
             <div>
                 {isOpen?
                     <ul className='pl-6 pt-4 space-y-2'>
                         {props.subCategories.map(cat =>(
-                            <li className='text-gray-500' onClick={() => {
+                            <li className='text-gray-500 w-max cursor-pointer' onClick={() => {
                                 props.toggleMenu()
                                 navigate(`/category/${cat.subcategoryName}-aesc-${cat.subcategoryDisplayName}`)}}>{cat.subcategoryDisplayName}</li>
                         ))}

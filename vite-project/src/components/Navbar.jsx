@@ -24,9 +24,9 @@ const Navbar = () => {
     useEffect(() => {
         getCategories();
         if(localStorage.getItem("userId")==null){
-        setTimeout(() =>{
-          setModal(true);
-        },3000)
+        // setTimeout(() =>{
+        //   setModal(true);
+        // },3000)
       }
     },[])
 
@@ -76,8 +76,8 @@ const Navbar = () => {
     
 
   return (
-    <div className='sm:h-[100px] flex flex-col border-b shadow-md absolute top-0 bg-white top-0 w-full z-10'>
-        <nav className="w-full h-full px-4 grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 space-x-4 content-center bg-white md:border-b">
+    <div className='sm:h-[100px] flex flex-col border-b-2 shadow-md fixed top-0 bg-white top-0 w-full z-10'>
+        <nav className="w-full py-2 px-4 grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 space-x-4 content-center bg-white md:border-b">
             <div className="col-span-1 flex">
                 <button className="md:hidden navbar-burger flex items-center text-blue-600 p-3" onClick={toggleMenu}>
                     <svg className="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -135,7 +135,7 @@ const Navbar = () => {
             <div className='col-span-1 sm:col-span-2 flex justify-evenly items-center'>
             
             {localStorage.getItem("userId") ==null ? 
-            <button className="lg:inline-block py-2 px-6 text-xs  sm:text-sm text-gray-900 font-bold hover:underline" onClick={() =>{setModal(true)}}>Sign In/Register</button>
+            <button className="lg:inline-block py-2 sm:px-6 text-xs  sm:text-sm text-gray-900 font-bold hover:underline" onClick={() =>{setModal(true)}}>Sign In</button>
             : <button className="lg:inline-block py-2 px-6 text-xs sm:text-sm text-gray-900 font-bold hover:underline" onClick={logOut}>Logout</button>}
             <CartIcon />
             </div>
@@ -144,7 +144,7 @@ const Navbar = () => {
 
         </nav>
         <div className="md:hidden mt-3 px-2 w-full self-center bg-white">
-            <div className=" mb-4 flex w-full flex-wrap items-stretch">
+            <div className=" mb-2 flex w-full flex-wrap items-stretch">
                 <input
                 type="search"
                 className=" m-0 -mr-0.5 block min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-gray-200 bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-black dark:placeholder:text-gray-400 dark:focus:border-primary"
@@ -177,7 +177,7 @@ const Navbar = () => {
         {/* <div className={`lg:hidden navbar-menu relative z-50 ${isOpen? "": "hidden"}`}> */}
             {/* <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25" onClick={toggleMenu}></div> */}
             {/* mobile menu */}
-            <nav className={`${isOpen? "transition-[left] duration-500 left-[0px]": "left-[-100%] transition-[left] duration-300"} md:hidden  fixed top-0 bottom-0 w-full py-6 bg-white border-r overflow-y-auto`}>
+            <nav className={`${isOpen? "transition-[left] duration-500 left-[0px]": "left-[-100%] transition-[left] duration-300"} flex flex-col fixed top-0 md:top-[100px] bottom-0 w-full py-6 bg-white border-r overflow-y-auto`}>
                 <div className="flex items-center mb-8">
                     <button className="navbar-close pl-2" onClick={toggleMenu}>
                         <svg className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -208,7 +208,7 @@ const Navbar = () => {
         {/* </div> */}
         <RegisterModal setModal = {setModal} modal={modal} />
 
-        <CategoryBanner />
+        <CategoryBanner isOpen={isOpen} toggleMenu={toggleMenu} />
         
     </div>
   )

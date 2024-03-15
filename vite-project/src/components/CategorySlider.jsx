@@ -54,7 +54,7 @@ const CategorySlider = () => {
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 3,
           slidesToScroll: 1
         }
       }
@@ -67,11 +67,10 @@ const CategorySlider = () => {
     ]
 
   return (
-    <div className='w-full py-4'>
-        <div className='left-0 w-full px-4 md:px-6 absolute flex top-1/2 transform -translate-y-1/2 justify-between z-10'>
-          <ChevronLeftIcon className=' h-5 md:h-7 w-auto cursor-pointer' onClick={() => slider?.current?.slickPrev()} />
-          <ChevronRightIcon className='h-5 md:h-7 w-auto cursor-pointer' onClick={() => slider?.current?.slickNext()} />
-          </div>
+    <div className='w-full py-1 sm:py-4'>
+        
+          <ChevronLeftIcon className='absolute left-1 top-1/2 transform -translate-y-1/2 h-5 md:h-7 cursor-pointer' onClick={() => slider?.current?.slickPrev()} />
+          <ChevronRightIcon className='absolute right-1 top-1/2 transform -translate-y-1/2 h-5 md:h-7 cursor-pointer' onClick={() => slider?.current?.slickNext()} />
         <Slider ref={slider} {...settings}>
           
             {categories && categories.map((c,i) => (
