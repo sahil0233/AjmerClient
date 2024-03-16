@@ -16,6 +16,22 @@ const categories = [{
 },{
   name : 'shampoossc2',
   displayName : 'Shampoos'
+},
+{
+  name : 'freshenerssc2',
+  displayName : 'Fresheners'
+},
+{
+  name : 'hairOilssc2',
+  displayName : 'Hair Oil'
+},
+{
+  name : 'toothpastessc2',
+  displayName : 'Toothpaste'
+},
+{
+  name : 'eyelinerssc2',
+  displayName : 'Eyeliners'
 }
 ]
 const CategorySlider = () => {
@@ -61,9 +77,13 @@ const CategorySlider = () => {
     ]
     };
     const imgPaths = [
-        "https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2FcategoryFruits.svg?alt=media&token=6ad904b8-3664-46df-a4df-816d531d16fd",
-        "https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2FcategoryPackagedFood.svg?alt=media&token=ab77e307-d18e-4e02-b485-a93efac38b0b",
-        "https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2FcategoryGrocery.svg?alt=media&token=a3e31d80-9c35-45d8-b153-b74d3ea4ab30"
+        "https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2FcategoryCreams.svg?alt=media&token=1d4b22cb-5e56-45c7-abdf-334935ce50ed",
+        "https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2FcategorySoaps.svg?alt=media&token=21adfed7-aa77-4313-bedb-8d7ddf4e4284",
+        "https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2FcategoryShampoos.svg?alt=media&token=46780278-ddc5-4425-8b89-d1d7383994a2",
+         "https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2FcategoryFresheners.svg?alt=media&token=e298d1a9-d604-4a7f-b120-2692950a12b0",
+        "https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2FcategoryHairOil.svg?alt=media&token=0a019237-d669-410a-944e-d7f398f066f4",
+        "https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2FcategoryToothpaste.svg?alt=media&token=b1066840-7038-4cbc-8301-6093b09c797a",
+        "https://firebasestorage.googleapis.com/v0/b/ajmerstore-7d3af.appspot.com/o/assets%2FcategoryEyeliner.svg?alt=media&token=3bbed903-8c5b-43f9-80a5-cc93349fbdcc"
     ]
 
   return (

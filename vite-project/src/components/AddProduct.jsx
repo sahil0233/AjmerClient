@@ -31,7 +31,7 @@ const AddProduct = () => {
 
     const getCategory = async() => {
         const querySnapshot = await getDocs(collection(firestore,"categories"));
-        const extractedNames = querySnapshot.docs.map(doc => doc.data().name);
+        const extractedNames = querySnapshot.docs.map(doc => doc.id);
         setCategories(extractedNames);
     }
 
