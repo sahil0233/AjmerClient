@@ -24,9 +24,9 @@ const Navbar = () => {
     useEffect(() => {
         getCategories();
         if(localStorage.getItem("userId")==null){
-        // setTimeout(() =>{
-        //   setModal(true);
-        // },3000)
+        setTimeout(() =>{
+          setModal(true);
+        },3000)
       }
     },[])
 

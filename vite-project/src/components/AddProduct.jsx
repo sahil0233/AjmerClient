@@ -4,6 +4,7 @@ import { CheckIcon, ChevronUpDownIcon, XMarkIcon } from '@heroicons/react/20/sol
 import {storage, firestore} from "../firebase/FirebaseConfig";
 import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { z } from "zod";
 
 const AddProduct = () => {
 
@@ -19,14 +20,35 @@ const AddProduct = () => {
     const [tags,setTags] = useState([]);
     const [image,setImage] = useState([]);
     const [imagePreview, setImagePreview] = useState([]);
-    const [voucher,setVoucher] = useState(null);
+    const [voucher,setVoucher] = useState("");
     const [brand,setBrand] = useState("");
-    
+    const [loading, setLoading] = useState(false);
     const [visible,setVisible] = useState(true);
 
     useEffect(() => {
         getCategory();
     },[]);
+
+    //zod schema verification
+    const URLRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+
+    const ProductSchema = z.object({
+        title: z.string().min(1).max(100), // Ensuring title length is between 1 and 100 characters
+        description: z.string().min(1), // Ensuring description is not empty
+        category: z.string().min(1), // Ensuring category is not empty
+        tags: z.array(z.string()).max(10), // Allowing up to 10 tags
+        image: z.array(z.string().refine(url => URLRegex.test(url), { message: "Invalid URL format" })).min(1), // Validating URL format for images
+        voucher: z.string().optional(), // Optional voucher field
+        brand: z.string().min(1), // Ensuring brand is not empty
+        visible: z.boolean()
+    });
+
+    const VariationSchema = z.object({
+    name: z.string().min(1).max(50), // Ensuring variation name length is between 1 and 50 characters
+    quantity: z.number().int().min(0), // Ensuring quantity is a non-negative integer
+    price: z.number().min(0), // Ensuring price is a non-negative number
+    discountPrice: z.number().min(0), // Optional discount price, ensuring it's a non-negative number
+});
 
 
     const getCategory = async() => {
@@ -90,10 +112,11 @@ const AddProduct = () => {
     };
     //  addproduct
     const handleAddProducts = async(e) => {
-    e.preventDefault();
-    const prodRef = collection(firestore, "products");
-    const variationRef = collection(firestore, "variations");
-    try {
+        e.preventDefault();
+        setLoading(true);
+        const prodRef = collection(firestore, "products");
+        const variationRef = collection(firestore, "variations");
+        try {
 
         let imgUrls=[];
         for(let i=0;i<image.length ;i++){
@@ -103,37 +126,61 @@ const AddProduct = () => {
             imgUrls.push(url);
         }
         
-        // const variationDoc = await addDoc(variationRef,{
-        //     variants : variations,
-        //     quantity : quantity,
-        //     price : price,
-        //     discounted_price : discounted_price
-        // })
-
-       const docRef = await addDoc(prodRef, {
-                        title,
-                        description,
-                        category : selectedCategory,
-                        tags: tags,
-                        image : imgUrls,
-                        voucher,
-                        brand,
-                        visible,
-                        
-                    });
-                    const variationsCollection = collection(firestore, "products",docRef.id,"variations");
-            for(let i =0;i<variations.length;i++){
-                const variationdocRef = await addDoc(variationsCollection, {
-                name : variations[i],
-                quantity : quantity[i],
-                price : price[i],
-                discountPrice : discounted_price[i]
-                })
-            }
         
-            console.log("done");
+        try{
+            const validatedProduct = ProductSchema.parse({
+                title: title,
+                description: description,
+                category : selectedCategory,
+                tags: tags,
+                image : imgUrls,
+                voucher: voucher,
+                brand : brand,
+                visible : visible,
+            });
+            try{
+                const variationDataArray = variations.map((variation, index) => ({
+                name: variation[index],
+                quantity: quantity[index],
+                price: price[index],
+                discountPrice: discounted_price[index]
+                }));
+
+                const validatedVariations = VariationSchema.array().parse(variationDataArray);
+                const docRef = await addDoc(prodRef, validatedProduct);
+                const variationsCollection = collection(firestore, "products",docRef.id,"variations");
+                for (const variation of validatedVariations){
+                    const variationdocRef = await addDoc(variationsCollection, variation);
+                }
+                setLoading(false);
+                alert("Product added");
+                setTitle("");
+                setDescription("");
+                setSelectedCategory(undefined);
+                setVariations([]);
+                setBrand("");
+                setPrice([]);
+                setDiscounted_price([]);
+                setQuantity([]);
+                setVoucher("");
+                setTags([]);
+                setImage([]);
+                setImagePreview([]);
+                
+            }catch(variationError){
+                alert("Variation data is invalid", variationError.message);
+                setLoading(false)
+            }
+
+        }catch(prodError){
+            console.log(prodError)
+            alert("Product data is invalid", prodError);
+            setLoading(false)
+        }
+
     } catch(e) {
         console.error(e);
+        setLoading(false);
     }
 }
 
@@ -154,7 +201,7 @@ const AddProduct = () => {
             {categories && 
                 <Listbox value={selectedCategory === undefined ? "loading..." : selectedCategory} onChange={setSelectedCategory}>
                     <div className="relative mt-1">
-                    <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                    <Listbox.Button className="cursor-pointer relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                         <span className="block truncate">{selectedCategory}</span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                         <ChevronUpDownIcon

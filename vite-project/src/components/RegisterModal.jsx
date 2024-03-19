@@ -4,7 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { getAuth,RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth, firestore } from "../firebase/FirebaseConfig";
 import { useNavigate } from "react-router-dom";
-import { addDoc, collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
+import { addDoc, collection, query, where, getDocs, Timestamp, doc, getDoc, setDoc } from 'firebase/firestore';
 import Loader from './Loader';
 import OtpTimer from "otp-timer";
 
@@ -60,15 +60,14 @@ const RegisterModal = (props) => {
             setLoading(true);
             const data = await user.confirm(otp);
             
-            const userRef = collection(firestore, "users");
-            const q = query(userRef, where("userId", "==", data.user.uid));
-            const querySnapshot = await getDocs(q);
-            if(querySnapshot.empty){
-                await addDoc(userRef,{
-                    userId : data.user.uid,
+            const userRef = doc(firestore, "users",data.user.uid);
+            const querySnapshot = await getDoc(userRef);
+            if(!querySnapshot.exists()){
+                await setDoc(userRef,{
                     name: data.user.displayName,
                     mobile : data.user.phoneNumber,
                     email : data.user.email,
+                    role : "customer",
                     registerationTime : Timestamp.now(),
                     address : ""
                 })
@@ -79,7 +78,8 @@ const RegisterModal = (props) => {
             window.location.reload();
         }catch(e) {
             setLoading(false);
-            alert("Somethign went wrong!Please try again")
+            alert(e);
+            // alert("Somethign went wrong!Please try again")
         }
         setOtp("");
 

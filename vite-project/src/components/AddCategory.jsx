@@ -1,38 +1,50 @@
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, setDoc } from 'firebase/firestore';
 import { Listbox, Transition } from '@headlessui/react'
 import React, { useEffect, useState,Fragment } from 'react'
 import { firestore } from '../firebase/FirebaseConfig';
 import { CheckIcon, ChevronUpDownIcon, XMarkIcon } from '@heroicons/react/20/solid';
+import { z } from "zod";
 
 const AddCategory = () => {
     const [count, setCount] = useState(0);
     const [categories, setCategories] = useState([]);
     const [parent,setParent] = useState("null");
     const [categoryName, setCategoryName] = useState("");
+    const [displayName, setDisplayName] = useState("");
     
     useEffect(() => {
         getCategory();
     },[count]);
 
+    const CategoryNameSchema = z.string().regex(/^\S+$/);
+
     const getCategory = async() => {
         const querySnapshot = await getDocs(collection(firestore,"categories"));
-        const extractedNames = querySnapshot.docs.map(doc => doc.data().name);
+        const extractedNames = querySnapshot.docs.map(doc => doc.id);
         setCategories([...extractedNames, "null"]);
     }
 
     const handleAddCategory = async(e) => {
         e.preventDefault();
+        try{
+            const parsedData = CategoryNameSchema.parse(categoryName);
 
-        const categoryRef = collection(firestore,"categories");
-        try {
-            await addDoc(categoryRef,{
-                name :categoryName,
-                parent : parent === "null"?null : parent
-            })
-            setCount(prev => prev+1);
-            console.log(categoryName + " " + parent);
-        } catch(err) {
-            console.error(err);
+            const categoryRef = doc(firestore,"categories",parsedData);
+            try {
+                await setDoc(categoryRef,{
+                    displayName : displayName,
+                    parent : parent === "null"?null : parent
+                })
+                setCount(prev => prev+1);
+                setCategoryName("");
+                setDisplayName("");
+                setParent("null")
+                alert("Category Added")
+            } catch(err) {
+                console.error(err);
+            }
+        }catch(error){
+            alert("Category Name is invalid.Don't use spaces.");
         }
     }
 
@@ -41,6 +53,12 @@ const AddCategory = () => {
         <div className="md:col-span-3">
             <label htmlFor="categoryName">Category name</label>
             <input type="text" name="categoryName" id="categoryName" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} />
+
+        </div>
+        <div className="md:col-span-3">
+            <label htmlFor="categoryName">Display name</label>
+            <input type="text" name="displayName" id="displayName" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+            
         </div>
 
         <div className="md:col-span-3">

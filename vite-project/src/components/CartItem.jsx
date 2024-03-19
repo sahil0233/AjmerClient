@@ -70,18 +70,18 @@ const CartItem = (props) => {
 
   return (
         <div> 
-                <div className="h-40 md:h-36 lg:h-32 flex md:grid grid-cols-8 mb-6 rounded-lg border px-2 py-2">
-                    <img src={props.product.productImage} alt="product-image" className="w-24 h-auto col-span-2  md:col-span-1 box-border md:h-full p-2 rounded-lg" />
+                <div className="h-40 lg:h-32 flex md:grid grid-cols-8 mb-6 rounded-lg border px-2 py-2">
+                    <img src={props.product.productImage} alt="product-image" className="h-full w-20 sm:w-24 object-contain col-span-2  md:col-span-1 box-border md:h-full p-2 rounded-lg" />
                     <div className="col-span-6 md:col-span-7 lg:grid grid-cols-7 sm:mx-4  w-full sm:justify-between">
                         <div className="mt-2 lg:mt-5 sm:mt-0 flex flex-col col-span-3 justify-center">
-                        <h2 className="text-xl font-normal text-black hover:underline cursor-pointer" onClick={() =>{navigate(`/product/${props.product.productId}`)}}>{props.product.productTitle} : {props.product.variantName}</h2>
-                        <p className="mt-1 text-xl text-gray-600">Variant: <span className=' text-xl text-black font-medium'>{props.product.variantName}</span></p>
+                        <h2 className="text-sm md:text-xl font-normal text-black hover:underline cursor-pointer" onClick={() =>{navigate(`/product/${props.product.productId}`)}}>{props.product.productTitle} : {props.product.variantName}</h2>
+                        <p className="mt-1 text-xs md:text-xl text-gray-600">Variant: <span className=' text-black font-medium'>{props.product.variantName}</span></p>
                         </div>
-                        <h2 className='hidden text-xl lg:flex text-black font-medium justify-center items-center'>₹{props.product.discountPrice}</h2>
-                        <h2 className='hidden text-xl lg:flex text-green-600 font-medium justify-center items-center'>₹{props.product.price- props.product.discountPrice}</h2>
+                        <h2 className='hidden text-sm md:text-xl lg:flex text-black font-medium justify-center items-center'>₹{props.product.discountPrice}</h2>
+                        <h2 className='hidden text-sm md:text-xl lg:flex text-green-600 font-medium justify-center items-center'>₹{props.product.price- props.product.discountPrice}</h2>
                         <div className="hidden mt-4 lg:flex flex-col  justify-center items-center sm:mt-0">
                         <div className="flex gap-1 items-center border-gray-100">
-                            {!editable ? (<PencilIcon className='h-6 w-6 self-end mb-1' onClick={handleEditClick} />) 
+                            {!editable ? (<PencilIcon className='h-4 w-4 md:h-6 md:w-6 self-end mb-1' onClick={handleEditClick} />) 
                             : <div className='h-6 w-6 self-end mb-1'> </div>
                             }
                             <div className='flex flex-col gap-1 items-center'>
@@ -92,12 +92,12 @@ const CartItem = (props) => {
                                 name='quantity'
                                 value={quantity}
                                 onChange={(e) => setQuantity(e.target.value)}
-                                className='w-12 p-2 rounded-lg text-center'
+                                className='w-6 md:w-12 p-2 rounded-lg text-center'
                                 disabled={!editable}
                                 />
                              </div>
                                 {editable ? (<CheckCircleIcon className='h-6 w-6 self-end mb-1' onClick={handleSaveClick} />)
-                                : <div className='h-6 w-6 self-end mb-1'> </div>
+                                : <div className='h-4 w-4 md:h-6 md:w-6  self-end mb-1'> </div>
                                 }
                         </div>
                         {editable && (<p className='text-xs'>Click to save</p>)}
@@ -106,12 +106,12 @@ const CartItem = (props) => {
                         <TrashIcon className=' mb-1 h-7 w-auto text-red-600 hover:text-red-500' onClick={deleteCartItem} />
                         {/* responsive mobile */}
                         </div>
-                        <div className='flex lg:hidden justify-around w-full'>
-                            <h2 className=''><span>You Pay</span><span className='text-xl text-black font-medium flex justify-center items-center'>₹{props.product.discountPrice} </span></h2>
-                            <h2 className=''><span>You Save</span><span className='text-xl text-green-600 font-medium flex justify-center items-center'>₹{props.product.price- props.product.discountPrice}</span></h2>
+                        <div className='mt-3 flex lg:hidden justify-around w-full'>
+                            <h2 className=''><span className='text-xs'>You Pay</span><span className='text-xl text-black font-medium flex justify-center items-center'>₹{props.product.discountPrice} </span></h2>
+                            <h2 className=''><span className='text-xs'>You Save</span><span className='text-xl text-green-600 font-medium flex justify-center items-center'>₹{props.product.price- props.product.discountPrice}</span></h2>
                             <div className="flex gap-1 items-center border-gray-100">
-                                {!editable ? (<PencilIcon className='h-6 w-6 self-end mb-1' onClick={handleEditClick} />) 
-                                : <div className='h-6 w-6 self-end mb-1'> </div>
+                                {!editable ? (<PencilIcon className='h-4 w-4 sm:h-6 sm:w-6 self-end mb-1' onClick={handleEditClick} />) 
+                                : <div className='w-4 h-4 sm:h-6 sm:w-6 self-end mb-1'> </div>
                                 }
                                 <div className='flex flex-col gap-1 items-center'>
                                 <label htmlFor="quantity" className='text-md font-medium'>Qty</label>
@@ -121,7 +121,7 @@ const CartItem = (props) => {
                                     name='quantity'
                                     value={quantity}
                                     onChange={(e) => setQuantity(e.target.value)}
-                                    className='w-12 p-2 rounded-lg text-center'
+                                    className='w-8 sm:w-12 px-0 py-2 rounded-lg text-center'
                                     disabled={!editable}
                                     />
                                 </div>

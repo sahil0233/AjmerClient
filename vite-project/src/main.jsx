@@ -12,6 +12,8 @@ import Cart from './pages/Cart.jsx';
 import RegisterModal from './components/RegisterModal.jsx';
 import Admin from './pages/Admin.jsx';
 import { RecoilRoot } from 'recoil';
+import ScrollTopArrow from './components/ScrollTopArrow.jsx';
+import WhatsappChat from './components/WhatsappChat.jsx';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +51,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
   <RecoilRoot>
     <RouterProvider router={router} />
+    {window.location.pathname !== '/admin' && <>
+    <WhatsappChat />
+    <ScrollTopArrow />
+    </>}
     <div id='recaptcha-container'></div>
   </RecoilRoot>
   </React.StrictMode>,
