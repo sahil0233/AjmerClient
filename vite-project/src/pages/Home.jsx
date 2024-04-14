@@ -5,10 +5,14 @@ import { Carousel } from 'flowbite-react';
 import FooterComponent from '../components/FooterComponent';
 import CategoryBanner from '../components/CategoryBanner';
 import { useNavigate } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { UserVerifiedStatus } from '../hooks/useAuth';
 
 const Home = () => {
 
   const navigate = useNavigate();
+  const verify = UserVerifiedStatus();
+  console.log("h", verify)
 
     
 

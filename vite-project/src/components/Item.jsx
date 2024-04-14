@@ -9,7 +9,9 @@ import { useRecoilState } from 'recoil';
 import { cartTotalAtom } from '../store/atoms/totalCartQuantity';
 
 const Item = (props) => {
-    
+    const [prices,setPrices] = useState([[]]);
+    const [total, setTotal] = useState(0);
+    const [pricePerPiece, setPricePerPiece] = useState(0);
     const [variations, setVariations] = useState([]);
     const [selectedVariant, setSelectedVariant ] = useState();
     const [quantity, setQuantity] = useState(0);
@@ -20,7 +22,23 @@ const Item = (props) => {
         getVariationData();
     },[]);
 
-
+    const getPricesData = async(variationId) => {
+        const docRef = collection(firestore, "products", props.id, "variations", variationId, "prices");
+        const docSnap = await getDocs(docRef);
+        let pricesArray = [];
+        let i=0;
+        docSnap.forEach((doc) => {
+            if (!pricesArray[i]) {
+                pricesArray[i] = [];
+            }
+            console.log(doc.data())
+                pricesArray[i][0] = doc.data().minQuantity;
+                pricesArray[i][1] = doc.data().maxQuantity;
+                pricesArray[i][2] = doc.data().price;
+                i++;
+        })
+        setPrices(pricesArray);
+    }
     const getVariationData = async() => {
         const docRef = collection(firestore, "products", props.id,"variations");
         const docSnap = await getDocs(docRef);
@@ -30,6 +48,7 @@ const Item = (props) => {
             setSelectedVariant(newData[0]);
             // console.log(newData[0].variationId)
             getQuantity(newData[0].variationId);
+            getPricesData(newData[0].variationId)
     }
 
     const getQuantity = async(variationid) => {
@@ -48,6 +67,60 @@ const Item = (props) => {
 
 
     }
+
+    const handleFocus = (event) => {
+        // Clear the input if the initial value is 0 when it's focused
+        if (quantity === 0) {
+        event.target.value = '';
+        }
+    };
+
+    const handleBlur = (event) => {
+        // Set the input value to 0 if it's empty when blurred
+        if (event.target.value === '') {
+        setQuantity(0);
+        }
+    };
+
+    const increaseQuantity = () => {
+        const newQuantity = quantity+1;
+        setQuantity(newQuantity);
+        for(let i=0;i<prices.length;i++){
+            if(newQuantity>=prices[i][0] && newQuantity <= prices[i][1]){
+                setPricePerPiece(prices[i][2]);
+                setTotal(newQuantity*prices[i][2])
+            }
+        }
+        
+    }
+
+    const decreaseQuantity = () => {
+        const newQuantity = quantity-1;
+        setQuantity(newQuantity);
+        for(let i=0;i<prices.length;i++){
+            if(newQuantity>=prices[i][0] && newQuantity <= prices[i][1]){
+                setPricePerPiece(prices[i][2]);
+                setTotal(newQuantity*prices[i][2])
+            }
+        }
+        
+    }
+
+    
+
+    const handleQuantityChange = (e) => {
+        const inputValue = e.target.value === '' ? 0 : parseInt(e.target.value,10);
+        setQuantity(inputValue);
+        for(let i=0;i<prices.length;i++){
+            console.log(inputValue)
+            if(inputValue>=prices[i][0] && inputValue <= prices[i][1]){
+                setPricePerPiece(prices[i][2]);
+                setTotal(inputValue*prices[i][2])
+            }
+        }
+    }
+
+    
 
     const handleVariantChange = (v) => {
     // Example: Update price based on the selected variant
@@ -69,24 +142,22 @@ const Item = (props) => {
             const q = query(cartRef, where("userId", "==", localStorage.getItem('userId')));
             const querySnapshot = await getDocs(q);
             if(querySnapshot.empty){
+                const docRef = await addDoc(cartRef,{
+                    userId : localStorage.getItem('userId')
+                })
 
-                        const docRef = await addDoc(cartRef,{
-                            userId : localStorage.getItem('userId')
-                        })
+                const itemsCollection = collection(firestore,"carts",docRef.id,"items");
+                const itemRef = await addDoc(itemsCollection, {
+                    productId : props.id,
+                    variantId : selectedVariant.variationId,
+                    quantity: quantity,
+                    productImage : props.image,
+                    productTitle : props.title,
+                    pricePerPiece : pricePerPiece,
+                    variantName : selectedVariant.name,
+                    productBrand : props.brand
 
-                        const itemsCollection = collection(firestore,"carts",docRef.id,"items");
-                        const itemRef = await addDoc(itemsCollection, {
-                            productId : props.id,
-                            variantId : selectedVariant.variationId,
-                            quantity: 1,
-                            productImage : props.image,
-                            productTitle : props.title,
-                            price : selectedVariant.price,
-                            discountPrice : selectedVariant.discountPrice,
-                            variantName : selectedVariant.name,
-                            productBrand : props.brand
-
-                        })
+                })
 
             }
             else {
@@ -94,28 +165,59 @@ const Item = (props) => {
                 const currdoc = querySnapshot.docs[0];
                 
                 const existingItemsCollection = collection(firestore, 'carts', currdoc.id, "items");
+                const itemQuery = query(existingItemsCollection, where("productId", "==", props.id), where("variantId" ,"==", selectedVariant.variationId));
+                const itemDoc = await getDocs(itemQuery);
+                if(!itemDoc.empty){
+                    itemDoc.forEach(async(idoc) => {
+                        const itemRef = doc(firestore,"carts", currdoc.id,"items",idoc.id);
+                        await updateDoc(itemRef, {
+                            pricePerPiece : pricePerPiece,
+                            quantity : quantity
+
+                        })
+                    });
+                }else{
                 const itemRef = await addDoc(existingItemsCollection, {
                             productId : props.id,
                             variantId : selectedVariant.variationId,
-                            quantity: 1,
+                            quantity: quantity,
                             productImage : props.image,
                             productTitle : props.title,
-                            price : selectedVariant.price,
-                            discountPrice : selectedVariant.discountPrice,
+                            pricePerPiece: pricePerPiece,
                             variantName : selectedVariant.name,
                             productBrand : props.brand
 
                         })
                 } 
-                setQuantity(1);
-                setCartTotal(cartTotal+1);
+            }
+                getCartTotal();
         
         }else {
             alert("Sign in first");
+            return;
         }
         }catch(err){
             console.error(err)
         }
+    }
+
+    const getCartTotal = async() => {
+        const q = query(collection(firestore, "carts"), where("userId", "==",localStorage.getItem("userId")));
+        const querySnapshot = await getDocs(q);
+        if(!querySnapshot.empty){
+                const currdoc = querySnapshot.docs[0];
+                const existingItemsCollection = collection(firestore, 'carts', currdoc.id, "items");
+                const docSnap = await getDocs(existingItemsCollection);
+                let allItems =[];
+                if(!docSnap.empty){
+                    docSnap.forEach((doc) => {
+                    allItems.push({id: doc.id ,...doc.data()});
+                    })
+                    setCartTotal(allItems.reduce((total, currentItem) => {return total + parseInt(currentItem.quantity)},0))
+                    
+                }
+        }
+
     }
 
     const deleteCartItem = async() => {
@@ -140,48 +242,6 @@ const Item = (props) => {
 
     }
 
-    const decreaseQuantity = async() => {
-        try {
-            const cartRef = collection(firestore, 'carts');
-            const q = query(cartRef, where("userId", "==", localStorage.getItem('userId')));
-            const querySnapshot = await getDocs(q);
-            const currdoc = querySnapshot.docs[0];
-            const itemsCollection = collection(firestore,"carts",currdoc.id,"items");
-            const itemq = query(itemsCollection,where("productId","==",props.id),where("variantId","==",selectedVariant.variationId))
-            const docSnap = await getDocs(itemq);
-            const itemDoc = doc(firestore,"carts",currdoc.id,"items",docSnap.docs[0].id)
-            await updateDoc(itemDoc, {
-                quantity : increment(-1)
-            })
-            setQuantity(quantity-1)
-            setCartTotal(cartTotal-1);
-        }catch(err){
-            console.error(err);
-        }
-
-    }
-
-    const increaseQuantity = async() => {
-        try {
-            const cartRef = collection(firestore, 'carts');
-            const q = query(cartRef, where("userId", "==", localStorage.getItem('userId')));
-            const querySnapshot = await getDocs(q);
-            const currdoc = querySnapshot.docs[0];
-            const itemsCollection = collection(firestore,"carts",currdoc.id,"items");
-            const itemq = query(itemsCollection,where("productId","==",props.id),where("variantId","==",selectedVariant.variationId))
-            const docSnap = await getDocs(itemq);
-            const itemDoc = doc(firestore,"carts",currdoc.id,"items",docSnap.docs[0].id)
-            await updateDoc(itemDoc, {
-                quantity : increment(1)
-            }) 
-            setQuantity(quantity+1)
-            setCartTotal(cartTotal+1);
-        }catch(err) {
-            console.error(err)
-        }
-
-    }
-
   return (
     
     <div className="w-11/12 p-2 lg:p-4 sm:w-full h-60 sm:h-96 bg-white border-2 shadow-md rounded-xl">
@@ -192,17 +252,7 @@ const Item = (props) => {
             <div className="w-1/2 sm:w-full gap-2 sm:gap-0  flex flex-col sm:px-4 md:px-2 sm:py-3">
                 <span className="text-gray-400 mr-3 uppercase text-xs">{props.brand}</span>
                 <p className="text-md sm:text-sm lg:text-lg font-medium text-gray-600 truncate block capitalize cursor-pointer hover:underline" onClick={() => {navigate(`/product/${props.id}`)}}>{props.title} : <span>{selectedVariant.name}</span> </p>
-                <div className="flex justify-between lg:justify-around items-center">
-                    <div className='flex md:justify-center items-center gap-2'>
-                    <p className="text-xs text-gray-600 cursor-auto ml-2"><span className='font-normal block text-center'>MRP</span><span className='line-through'>₹{localStorage.getItem("userId")!=null?selectedVariant.price:""}</span></p>
-                    <p className="text-xs sm:text-sm font-semibold text-black cursor-auto my-3"><span className='font-normal block text-center'>Mart</span>₹{localStorage.getItem("userId")!=null?selectedVariant.discountPrice:""}</p>
-                    </div>
-                    {/* <div>
-                    <p className='text-xs text-gray-500 font-medium'>You Pay</p>
-                    <p>₹365</p>
-                    </div> */}
-                    <p className='flex flex-col justify-center items-center h-12 px-4 bg-blue-200 text-blue-800 text-center'>₹{localStorage.getItem("userId")!=null? selectedVariant.price-selectedVariant.discountPrice :""}<span className='block text-xs'> OFF </span></p>
-                </div>
+                {/* <p className="text-md text-gray-600 cursor-auto ml-2">₹83 - ₹110</p> */}
                 <Listbox value={selectedVariant.name} onChange={handleVariantChange}>
                         <div className="hidden sm:block relative mt-1">
                         <Listbox.Button className="cursor-pointer hover:border-2 hover:border-blue-500 relative w-full border-2 cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
@@ -253,25 +303,21 @@ const Item = (props) => {
                         </Transition>
                         </div>
                 </Listbox>
-                {quantity == 0 ?
+                 <div className='hidden sm:flex mt-2 w-full flex justify-between items-center'>
+                    <div className="flex items-center border-gray-100">
+                        <button className={`${quantity>0 ? "bg-blue-500 hover:bg-blue-300": "bg-gray-200"} text-white cursor-pointer rounded-l py-1 px-3.5 duration-100 `} disabled={quantity<1?true:false} onClick={decreaseQuantity}> - </button>
+                        <input className="h-8 w-14 border bg-white text-center text-black text-xs outline-none py-2" type='number' value={quantity} onChange={handleQuantityChange} onFocus={handleFocus} onBlur={handleBlur} />
+                        <button className={`bg-blue-500 hover:bg-blue-300 h-8 text-white text-xl rounded-r  px-3 duration-100`} onClick={increaseQuantity}> + </button>
+                    </div>
+                    <h2 className=' text-xs flex flex-col gap-1'><span className='text-gray-500 font-bold'>Rs/pc</span><span className='text-black'>{pricePerPiece}</span></h2>
+                    <h2 className=' text-xs flex flex-col gap-1'><span className='text-gray-500 font-bold'>Total</span><span className='text-black'>{total}</span></h2>
+                </div>
                 <button className='hidden sm:flex mt-2 w-full rounded-md flex gap-2 py-2 justify-center items-center bg-blue-500 hover:bg-blue-400' onClick={addToCart}>
                 <ShoppingCartIcon className='w-auto h-5 text-white' />
                 <span className='text-white font-medium text-sm'>Add To Cart </span>
                 </button>
-                :
-                <div className='hidden sm:flex mt-2 w-full flex justify-between items-center'>
-                    <div className="flex items-center border-gray-100">
-                        <button className={`${quantity==1 ? "block": "hidden"} h-8 cursor-pointer rounded-l bg-blue-500 py-1 px-3.5 duration-100 hover:bg-blue-300`} onClick={deleteCartItem}> <TrashIcon className='text-white w-auto h-4'/> </button>
-                        <button className={`${quantity>1 ? "block": "hidden"} text-white cursor-pointer rounded-l bg-blue-500 py-1 px-3.5 duration-100 hover:bg-blue-300`} onClick={decreaseQuantity}> - </button>
-                        <span className="h-8 w-8 border bg-white text-center text-black text-xs outline-none py-2">{quantity}</span>
-                        <button disabled={quantity== 3} className={`${quantity>=3? "bg-gray-400 cursor-default":" bg-blue-500 hover:bg-blue-300" } h-8 text-white text-xl rounded-r  px-3 duration-100`} onClick={increaseQuantity}> + </button>
-                    </div>
-                    <div className='w-10 h-8 flex items-center justify-center border border-gray-400 cursor-pointer' onClick={deleteCartItem}><XMarkIcon className='h-5 w-auto' /></div>
-                </div>
-                }
-                        {quantity >= 3 &&
-                            <span className="hidden sm:block w-full text-gray-400 text-xs font-normal">Add more from cart</span>
-                        }
+
+
             </div>
         </div>
         <div className='block sm:hidden'>
@@ -325,26 +371,17 @@ const Item = (props) => {
                         </Transition>
                         </div>
                 </Listbox>
-                {quantity == 0 ?
                 <button className=' mt-2 w-full rounded-md flex gap-2 py-2 justify-center items-center bg-blue-500 hover:bg-blue-400' onClick={addToCart}>
                 <ShoppingCartIcon className='w-auto h-5 text-white' />
                 <span className='text-white font-medium text-sm'>Add To Cart </span>
                 </button>
-                :
                 <div className=' mt-2 w-full flex justify-between items-center'>
                     <div className="flex items-center border-gray-100">
-                        <button className={`${quantity==1 ? "block": "hidden"} h-8 cursor-pointer rounded-l bg-blue-500 py-1 px-3.5 duration-100 hover:bg-blue-300`} onClick={deleteCartItem}> <TrashIcon className='text-white w-auto h-4'/> </button>
-                        <button className={`${quantity>1 ? "block": "hidden"} text-white cursor-pointer rounded-l bg-blue-500 py-1 px-3.5 duration-100 hover:bg-blue-300`} onClick={decreaseQuantity}> - </button>
+                        <button className={`${quantity>1 ? "block": "hidden"} text-white cursor-pointer rounded-l bg-blue-500 py-1 px-3.5 duration-100 hover:bg-blue-300`} onClick={() =>{setQuantity(quantity-1)}}> - </button>
                         <span className="h-8 w-8 border bg-white text-center text-black text-xs outline-none py-2">{quantity}</span>
-                        <button disabled={quantity== 3} className={`${quantity>=3? "bg-gray-400 cursor-default":" bg-blue-500 hover:bg-blue-300" } h-8 text-white text-xl rounded-r  px-3 duration-100`} onClick={increaseQuantity}> + </button>
+                        <button className={`${quantity>=3? "bg-gray-400 cursor-default":" bg-blue-500 hover:bg-blue-300" } h-8 text-white text-xl rounded-r  px-3 duration-100`} onClick={() =>{setQuantity(quantity-1)}}> + </button>
                     </div>
-                    <div className='w-10 h-8 flex items-center justify-center border border-gray-400 cursor-pointer' onClick={deleteCartItem}><XMarkIcon className='h-5 w-auto' /></div>
                 </div>
-                }
-                        {quantity >= 3 &&
-                            <span className="w-full text-gray-400 text-xs font-normal">Add more from cart</span>
-                        }
-
         </div>
         </>
     }

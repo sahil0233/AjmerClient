@@ -14,12 +14,17 @@ import Admin from './pages/Admin.jsx';
 import { RecoilRoot } from 'recoil';
 import ScrollTopArrow from './components/ScrollTopArrow.jsx';
 import WhatsappChat from './components/WhatsappChat.jsx';
+import  AuthProvider from './hooks/useAuth.jsx';
+import VerificationPending from './pages/VerificationPending.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+
+
 
 const router = createBrowserRouter([
   {
     path: "/",
     element : <Home />,
-    errorElement : <NotFound />
+    errorElement : <NotFound />,
   },
   {
     path : "/product/:id",
@@ -35,7 +40,9 @@ const router = createBrowserRouter([
   },
   {
     path : "/cart",
-    element : <Cart />
+    element : <ProtectedRoute>
+      <Cart/>
+    </ProtectedRoute>
   },
   {
     path : "/register",
@@ -50,12 +57,14 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
   <RecoilRoot>
+  <AuthProvider>
     <RouterProvider router={router} />
     {window.location.pathname !== '/admin' && <>
     <WhatsappChat />
     <ScrollTopArrow />
     </>}
     <div id='recaptcha-container'></div>
+  </AuthProvider>
   </RecoilRoot>
   </React.StrictMode>,
 )

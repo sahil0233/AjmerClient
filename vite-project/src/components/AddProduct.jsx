@@ -1,6 +1,6 @@
 import React, {useState, Fragment, useEffect} from 'react';
 import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, ChevronUpDownIcon, XMarkIcon } from '@heroicons/react/20/solid';
+import { CheckIcon, ChevronUpDownIcon, PlusCircleIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import {storage, firestore} from "../firebase/FirebaseConfig";
 import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -13,10 +13,13 @@ const AddProduct = () => {
     const [description,setDescription] = useState("");
     const [selectedCategory,setSelectedCategory] = useState();
     const [categories,setCategories] = useState();
+    const [variationInput, setVariationInput] = useState();
     const [variations,setVariations] = useState([]);
     const [quantity,setQuantity] = useState([]);
-    const [price,setPrice] = useState([]);
-    const [discounted_price,setDiscounted_price] = useState([]);
+    const [minQuantity, setMinQuantity] = useState('');
+    const [maxQuantity, setMaxQuantity] = useState('');
+    const [price, setPrice] = useState('');
+    const [priceRanges, setPriceRanges] = useState([]);
     const [tags,setTags] = useState([]);
     const [image,setImage] = useState([]);
     const [imagePreview, setImagePreview] = useState([]);
@@ -46,8 +49,6 @@ const AddProduct = () => {
     const VariationSchema = z.object({
     name: z.string().min(1).max(50), // Ensuring variation name length is between 1 and 50 characters
     quantity: z.number().int().min(0), // Ensuring quantity is a non-negative integer
-    price: z.number().min(0), // Ensuring price is a non-negative number
-    discountPrice: z.number().min(0), // Optional discount price, ensuring it's a non-negative number
 });
 
 
@@ -55,6 +56,21 @@ const AddProduct = () => {
         const querySnapshot = await getDocs(collection(firestore,"categories"));
         const extractedNames = querySnapshot.docs.map(doc => doc.id);
         setCategories(extractedNames);
+    }
+
+    const addRange = (index) => {
+        console.log(index);
+        if (!priceRanges[index]) {
+            priceRanges[index] = []; // Initialize as an empty array
+        }
+        priceRanges[index].push([minQuantity[index], maxQuantity[index], price[index]]);
+        // Update the state with the modified priceRanges array
+        setPriceRanges([...priceRanges]); 
+        console.log(priceRanges)
+    // Clear input fields after submission
+    setMinQuantity('');
+    setMaxQuantity('');
+    setPrice('');
     }
 
     const handleImageChange = (e) => {
@@ -82,13 +98,10 @@ const AddProduct = () => {
         setTags(newTags);
     };
 
-    const addVariation = (e) => {
-        if (e.key === "Enter") {
-            if (e.target.value.length > 0) {
-                setVariations([...variations, e.target.value]);
-                e.target.value = "";
-            }
-        }
+    
+    const addVariation = () => {
+                setVariations([...variations, variationInput]);
+        console.log(variations[0])
     };
 
     const removeVariation = (removedVariation) => {
@@ -119,38 +132,45 @@ const AddProduct = () => {
         try {
 
         let imgUrls=[];
-        for(let i=0;i<image.length ;i++){
-            const imgRef = ref(storage, `product-images/${selectedCategory}/${image[i].name}` );
-            await uploadBytes(imgRef, image[i]);
-            const url = await getDownloadURL(imgRef);
-            imgUrls.push(url);
-        }
+        // for(let i=0;i<image.length ;i++){
+        //     const imgRef = ref(storage, `product-images/${selectedCategory}/${image[i].name}` );
+        //     await uploadBytes(imgRef, image[i]);
+        //     const url = await getDownloadURL(imgRef);
+        //     imgUrls.push(url);
+        // }
         
         
         try{
-            const validatedProduct = ProductSchema.parse({
-                title: title,
-                description: description,
-                category : selectedCategory,
-                tags: tags,
-                image : imgUrls,
-                voucher: voucher,
-                brand : brand,
-                visible : visible,
-            });
+            // const validatedProduct = ProductSchema.parse({
+            //     title: title,
+            //     description: description,
+            //     category : selectedCategory,
+            //     tags: tags,
+            //     image : imgUrls,
+            //     voucher: voucher,
+            //     brand : brand,
+            //     visible : visible,
+            // });
             try{
                 const variationDataArray = variations.map((variation, index) => ({
                 name: variation[index],
                 quantity: quantity[index],
-                price: price[index],
-                discountPrice: discounted_price[index]
                 }));
+                console.log(variationDataArray)
+                debugger;
 
                 const validatedVariations = VariationSchema.array().parse(variationDataArray);
                 const docRef = await addDoc(prodRef, validatedProduct);
                 const variationsCollection = collection(firestore, "products",docRef.id,"variations");
+                let x =0;
                 for (const variation of validatedVariations){
                     const variationdocRef = await addDoc(variationsCollection, variation);
+                    const pricesCollection = collection(firestore, "products", docRef.id, "variations", variationdocRef.id,"prices");
+                    const pricesOfThisVariation = priceRanges[x];
+                    for(let i=0; i<pricesOfThisVariation.length;i++){
+                        await addDoc(pricesCollection,{minQuantity : pricesOfThisVariation[i][0], maxQuantity : pricesOfThisVariation[i][1], price : pricesOfThisVariation[i][2]})
+                    }
+                    x++;
                 }
                 setLoading(false);
                 alert("Product added");
@@ -253,21 +273,24 @@ const AddProduct = () => {
         </div>
         {/* variations */}
         <div className="md:col-span-5">
+            <div className='w-full flex gap-2 items-center'>
             <label htmlFor="variations">Variations</label>
             <input
                 name='variations'
                 id='variations'
-                className='w-full py-2.5 px-3 rounded-md mb-2 bg-white'
+                className='w-64 py-2.5 px-3 rounded-md mb-2 bg-white'
                 placeholder="Enter text and click Enter to add"
-                onKeyDown={addVariation}
+                onChange={(e) => setVariationInput(e.target.value)}
             />
+            <button className='p-2 rounded bg-black text-white' onClick={addVariation}>Add</button>
+            </div>
             <div className='gap-2'>
                 {variations?.map((variation, index) => {
                     return (
                         <div key={index} className="flex bg-gray-200   m-1 p-2 rounded-se-2xl rounded-es-2xl grid grid-cols-5 gap-2  ">
                             <div className='col-span-1'>
                                 <label htmlFor="variant">Variant</label>
-                                <input type="text" name="variant" id="variant" className="transition-all flex items-center h-10 border mt-1 rounded px-4 w-full bg-gray-50" placeholder="" value={variation} readOnly/>
+                                <input type="text" name="variant" id="variant" className="transition-all flex items-center h-10 border mt-1 rounded px-4 w-full bg-gray-50" placeholder="" value={variations[index] || ''} readOnly/>
                             </div>
                             <div className='col-span-1'>
                                 <label htmlFor="quantity">Quantity</label>
@@ -278,28 +301,44 @@ const AddProduct = () => {
                                     setQuantity(newArray);
                                 }} />
                             </div>
-                            <div className='col-span-1'>
-                                <label htmlFor="price">Price</label>
-                                <input type="number" name="price" id="price" className="transition-all flex items-center h-10 border mt-1 rounded px-4 w-full bg-gray-50" placeholder="" value={price[index] || ''} required onChange={(e) => {
-                                    const newArray = [...price];
+                            <XMarkIcon
+                                onClick={() => removeVariation(variation)}
+                                className='h-4 w-4 cursor-pointer justify-self-end col-span-3' />
+                            <div className='col-span-3'>
+                            <div className='flex gap-2'>
+                            <button className='bg-black rounded py-2 w-64 text-white text-xs' onClick={() => addRange(index)}>Add range</button>
+                            <input id='min' type='number' value={minQuantity[index] || ''} onChange={(e) =>{
+                                const newArray = [...minQuantity];
+                                    newArray[index] = parseInt(e.target.value);
+                                    console.log(newArray);
+                                    setMinQuantity(newArray);
+                            }} placeholder='Min'/>
+                            <input id='max' type='number' value={maxQuantity[index] || ''} onChange={(e) =>{
+                                const newArray = [...maxQuantity];
+                                    newArray[index] = parseInt(e.target.value);
+                                    console.log(newArray);
+                                    setMaxQuantity(newArray);
+                            }} placeholder='Max' />
+                            <input id='price' type='number' value={price[index] || ''} onChange={(e) =>{
+                                const newArray = [...price];
                                     newArray[index] = parseInt(e.target.value);
                                     console.log(newArray);
                                     setPrice(newArray);
-                                }} />
+                            }} placeholder='Price' />
                             </div>
-                            <div className='col-span-1'>
-                                <label htmlFor="salePrice">Sale Price</label>
-                                <input type="salePrice" name="salePrice" id="salePrice" className="transition-all flex items-center h-10 border mt-1 rounded px-4 w-full bg-gray-50" placeholder="" value={discounted_price[index] || ''} required onChange={(e) => {
-                                    const newArray = [...discounted_price];
-                                    newArray[index] = parseInt(e.target.value);
-                                    console.log(newArray);
-                                    setDiscounted_price(newArray);
-                                }} />
-                            </div>
-
-                            <XMarkIcon
-                                onClick={() => removeVariation(variation)}
-                                className='h-4 w-4 cursor-pointer justify-self-end' />
+                            <div className='grid grid-cols-3'>
+                                <h3 className='col-span-1'>Min</h3>
+                                <h3 className='col-span-1'>Max</h3>
+                                <h3 className='col-span-1'>Price</h3>
+                                </div>
+                                {priceRanges[index] && priceRanges[index].map((p,i) => (
+                                    <div className='grid grid-cols-3'>
+                                    <h3 className='col-span-1'>{p[0]}</h3>
+                                    <h3 className='col-span-1'>{p[1]}</h3>
+                                    <h3 className='col-span-1'>{p[2]}</h3>
+                                    </div>
+                                ))}
+                        </div>
                         </div>
                     );
                 })}

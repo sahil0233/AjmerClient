@@ -6,10 +6,11 @@ import { ChevronDownIcon, MapPinIcon, ShoppingCartIcon } from "@heroicons/react/
 import { collection, getDocs, query , where} from 'firebase/firestore';
 import { firestore } from '../firebase/FirebaseConfig';
 import { useNavigate } from 'react-router-dom';
-import { getAuth,signOut } from 'firebase/auth';
+import { getAuth,signOut, onAuthStateChanged } from 'firebase/auth';
 import CartIcon from './CartIcon';
 import LocationModal from './LocationModal';
 import CategoryBanner from './CategoryBanner';
+import { UserAuth } from '../hooks/useAuth';
 
 const Navbar = () => {
 
@@ -20,17 +21,25 @@ const Navbar = () => {
 
     const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
+    const user = UserAuth();
 
     useEffect(() => {
         getCategories();
-        if(localStorage.getItem("userId")==null){
-        setTimeout(() =>{
-          setModal(true);
-        },3000)
-      }
-    },[])
+        if(user==null){
+            const timerId = setTimeout(() =>{
+            setModal(true);
+            },3000);
+
+            return () => clearTimeout(timerId);
+        }else{
+            setModal(false);
+        }
+        
+    },[user]);
 
     const auth = getAuth();
+
+    
     const logOut = () => {
 
         signOut(auth).then(() => {
@@ -134,8 +143,8 @@ const Navbar = () => {
             
             <div className='col-span-1 sm:col-span-2 flex justify-evenly items-center'>
             
-            {localStorage.getItem("userId") ==null ? 
-            <button className="lg:inline-block py-2 sm:px-6 text-xs  sm:text-sm text-gray-900 font-bold hover:underline" onClick={() =>{setModal(true)}}>Sign In</button>
+            {user == null ? 
+            <button className="lg:inline-block py-2 sm:px-6 text-xs  sm:text-sm text-gray-900 font-bold hover:underline" onClick={() =>{setModal(true)}}>Sign In/Register</button>
             : <button className="lg:inline-block py-2 px-6 text-xs sm:text-sm text-gray-900 font-bold hover:underline" onClick={logOut}>Logout</button>}
             <CartIcon />
             </div>
@@ -196,7 +205,7 @@ const Navbar = () => {
                 </div>
                 <div className="mt-auto">
                     <div className="pt-6 flex justify-center items-center">
-                        {localStorage.getItem("userId") ==null ? 
+                        {user ==null ? 
                         <button className= "w-full py-2 px-6 bg-gray-50 text-sm text-gray-900 font-bold hover:underline" onClick={() =>{setModal(true)}}>Sign In/Register</button>
                         : <button className="w-full py-2 px-6 bg-gray-50 text-sm text-gray-900 font-bold hover:underline" onClick={logOut}>Logout</button>}
                     </div>
