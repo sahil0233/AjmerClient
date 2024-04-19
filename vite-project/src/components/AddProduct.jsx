@@ -120,8 +120,6 @@ const AddProduct = () => {
         setQuantity(newQ);
         const newP = price.filter((q,i) => i !== indx );
         setQuantity(newP);
-        const newSP = discounted_price.filter((q,i) => i !== indx );
-        setQuantity(newSP);
     };
     //  addproduct
     const handleAddProducts = async(e) => {
@@ -132,38 +130,37 @@ const AddProduct = () => {
         try {
 
         let imgUrls=[];
-        // for(let i=0;i<image.length ;i++){
-        //     const imgRef = ref(storage, `product-images/${selectedCategory}/${image[i].name}` );
-        //     await uploadBytes(imgRef, image[i]);
-        //     const url = await getDownloadURL(imgRef);
-        //     imgUrls.push(url);
-        // }
+        for(let i=0;i<image.length ;i++){
+            const imgRef = ref(storage, `product-images/${selectedCategory}/${image[i].name}` );
+            await uploadBytes(imgRef, image[i]);
+            const url = await getDownloadURL(imgRef);
+            imgUrls.push(url);
+        }
         
         
         try{
-            // const validatedProduct = ProductSchema.parse({
-            //     title: title,
-            //     description: description,
-            //     category : selectedCategory,
-            //     tags: tags,
-            //     image : imgUrls,
-            //     voucher: voucher,
-            //     brand : brand,
-            //     visible : visible,
-            // });
+            const validatedProduct = ProductSchema.parse({
+                title: title,
+                description: description,
+                category : selectedCategory,
+                tags: tags,
+                image : imgUrls,
+                voucher: voucher,
+                brand : brand,
+                visible : visible,
+            });
             try{
                 const variationDataArray = variations.map((variation, index) => ({
-                name: variation[index],
+                name: variation,
                 quantity: quantity[index],
                 }));
                 console.log(variationDataArray)
-                debugger;
 
-                const validatedVariations = VariationSchema.array().parse(variationDataArray);
+                // const validatedVariations = VariationSchema.array().parse(variationDataArray);
                 const docRef = await addDoc(prodRef, validatedProduct);
                 const variationsCollection = collection(firestore, "products",docRef.id,"variations");
                 let x =0;
-                for (const variation of validatedVariations){
+                for (const variation of variationDataArray){
                     const variationdocRef = await addDoc(variationsCollection, variation);
                     const pricesCollection = collection(firestore, "products", docRef.id, "variations", variationdocRef.id,"prices");
                     const pricesOfThisVariation = priceRanges[x];
@@ -177,17 +174,19 @@ const AddProduct = () => {
                 setTitle("");
                 setDescription("");
                 setSelectedCategory(undefined);
+                setVariationInput("")
                 setVariations([]);
                 setBrand("");
                 setPrice([]);
-                setDiscounted_price([]);
                 setQuantity([]);
                 setVoucher("");
                 setTags([]);
+                setPriceRanges([]);
                 setImage([]);
                 setImagePreview([]);
                 
             }catch(variationError){
+                console.log(variationError)
                 alert("Variation data is invalid", variationError.message);
                 setLoading(false)
             }
@@ -280,6 +279,7 @@ const AddProduct = () => {
                 id='variations'
                 className='w-64 py-2.5 px-3 rounded-md mb-2 bg-white'
                 placeholder="Enter text and click Enter to add"
+                value={variationInput}
                 onChange={(e) => setVariationInput(e.target.value)}
             />
             <button className='p-2 rounded bg-black text-white' onClick={addVariation}>Add</button>
@@ -372,7 +372,7 @@ const AddProduct = () => {
                 onKeyDown={addTag}
             />
             <div className='flex gap-2'>
-                {tags?.map((Tag, index) => {
+                {tags && tags.map((Tag, index) => {
                     return (
                         <div key={index} className="flex bg-white   m-1 p-2 rounded-se-2xl rounded-es-2xl  ">
                             <span className='mt-1 bg-gray-400 px-2 py-1 rounded-xl'>{Tag}</span>
