@@ -4,6 +4,7 @@ import { CheckIcon, ChevronUpDownIcon, PlusCircleIcon, XMarkIcon } from '@heroic
 import {storage, firestore} from "../firebase/FirebaseConfig";
 import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import Loader from './Loader'
 import { z } from "zod";
 
 const AddProduct = () => {
@@ -59,7 +60,15 @@ const AddProduct = () => {
     }
 
     const addRange = (index) => {
-        console.log(index);
+        console.log(maxQuantity[index]);
+        if(isNaN(minQuantity[index]) || isNaN(maxQuantity[index]) || isNaN(price[index]) ){
+            alert("Ranges field cannot be empty");
+            return;
+        }
+        if(minQuantity[index]>= maxQuantity[index]){
+            alert("Minimum quantity cannot be greater than Maximum Quantity");
+            return; 
+        }
         if (!priceRanges[index]) {
             priceRanges[index] = []; // Initialize as an empty array
         }
@@ -100,8 +109,12 @@ const AddProduct = () => {
 
     
     const addVariation = () => {
+        if(variationInput.length<1){
+            alert("Variations field is empty");
+            return;
+        }
                 setVariations([...variations, variationInput]);
-        console.log(variations[0])
+                setVariationInput("");
     };
 
     const removeVariation = (removedVariation) => {
@@ -118,8 +131,8 @@ const AddProduct = () => {
 
         const newQ = quantity.filter((q,i) => i !== indx );
         setQuantity(newQ);
-        const newP = price.filter((q,i) => i !== indx );
-        setQuantity(newP);
+        const newPriceRanges = priceRanges.filter((q,i) => i !== indx);
+        setPriceRanges(newPriceRanges);
     };
     //  addproduct
     const handleAddProducts = async(e) => {
@@ -201,10 +214,11 @@ const AddProduct = () => {
         console.error(e);
         setLoading(false);
     }
-}
+    }
 
   return (
     <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+    {loading && <Loader />}
         <div className="md:col-span-5">
             <label htmlFor="title">Title</label>
             <input type="text" name="title" id="title" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value={title || ''} onChange={(e) => setTitle(e.target.value)} />
@@ -220,7 +234,7 @@ const AddProduct = () => {
             {categories && 
                 <Listbox value={selectedCategory === undefined ? "loading..." : selectedCategory} onChange={setSelectedCategory}>
                     <div className="relative mt-1">
-                    <Listbox.Button className="cursor-pointer relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                    <Listbox.Button className="cursor-pointer relative w-full cursor-default rounded-lg bg-white py-4 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                         <span className="block truncate">{selectedCategory}</span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                         <ChevronUpDownIcon
