@@ -287,11 +287,11 @@ const AddProduct = () => {
         {/* variations */}
         <div className="md:col-span-5">
             <div className='w-full flex gap-2 items-center'>
-            <label htmlFor="variations">Variations</label>
+            <label className='text-xs' htmlFor="variations">Variations</label>
             <input
                 name='variations'
                 id='variations'
-                className='w-64 py-2.5 px-3 rounded-md mb-2 bg-white'
+                className='w-32 sm:w-64 py-2.5 px-3 rounded-md mb-2 bg-white'
                 placeholder="Enter text and click Enter to add"
                 value={variationInput}
                 onChange={(e) => setVariationInput(e.target.value)}
@@ -302,11 +302,11 @@ const AddProduct = () => {
                 {variations?.map((variation, index) => {
                     return (
                         <div key={index} className="flex bg-gray-200   m-1 p-2 rounded-se-2xl rounded-es-2xl grid grid-cols-5 gap-2  ">
-                            <div className='col-span-1'>
+                            <div className='col-span-2 sm:col-span-1'>
                                 <label htmlFor="variant">Variant</label>
                                 <input type="text" name="variant" id="variant" className="transition-all flex items-center h-10 border mt-1 rounded px-4 w-full bg-gray-50" placeholder="" value={variations[index] || ''} readOnly/>
                             </div>
-                            <div className='col-span-1'>
+                            <div className='col-span-2 sm:col-span-1'>
                                 <label htmlFor="quantity">Quantity</label>
                                 <input type="number" name="quantity" id="quantity" className="transition-all flex items-center h-10 border mt-1 rounded px-4 w-full bg-gray-50" placeholder="" value={quantity[index] || ''} required onChange={(e) => {
                                     const newArray = [...quantity];
@@ -317,23 +317,23 @@ const AddProduct = () => {
                             </div>
                             <XMarkIcon
                                 onClick={() => removeVariation(variation)}
-                                className='h-4 w-4 cursor-pointer justify-self-end col-span-3' />
-                            <div className='col-span-3'>
-                            <div className='flex gap-2'>
-                            <button className='bg-black rounded py-2 w-64 text-white text-xs' onClick={() => addRange(index)}>Add range</button>
-                            <input id='min' type='number' value={minQuantity[index] || ''} onChange={(e) =>{
+                                className='h-4 w-4 cursor-pointer justify-self-end col-span-1 sm:col-span-3' />
+                            <div className='col-span-5 md:col-span-3'>
+                            <div className='grid grid-cols-4 gap-2'>
+                            <button className='bg-black rounded py-2 col-span-1 text-white text-xs' onClick={() => addRange(index)}>Add range</button>
+                            <input className='col-span-1' id='min' type='number' value={minQuantity[index] || ''} onChange={(e) =>{
                                 const newArray = [...minQuantity];
                                     newArray[index] = parseInt(e.target.value);
                                     console.log(newArray);
                                     setMinQuantity(newArray);
                             }} placeholder='Min'/>
-                            <input id='max' type='number' value={maxQuantity[index] || ''} onChange={(e) =>{
+                            <input className='col-span-1' id='max' type='number' value={maxQuantity[index] || ''} onChange={(e) =>{
                                 const newArray = [...maxQuantity];
                                     newArray[index] = parseInt(e.target.value);
                                     console.log(newArray);
                                     setMaxQuantity(newArray);
                             }} placeholder='Max' />
-                            <input id='price' type='number' value={price[index] || ''} onChange={(e) =>{
+                            <input className='col-span-1' id='price' type='number' value={price[index] || ''} onChange={(e) =>{
                                 const newArray = [...price];
                                     newArray[index] = parseInt(e.target.value);
                                     console.log(newArray);
