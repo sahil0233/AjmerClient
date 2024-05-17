@@ -4,7 +4,7 @@ import { firestore } from '../firebase/FirebaseConfig';
 import { getDocs, collection, query,  where } from 'firebase/firestore';
 import Loader from './Loader';
 
-const ProductGrid = (props) => {
+const ProductGrid = ({selectedCategory}) => {
     const [loading, setLoading] = useState(false);
 
     const [products, setProducts] = useState([]);
@@ -12,9 +12,9 @@ const ProductGrid = (props) => {
     useEffect(() =>  {
       setLoading(true);
       
-     getAllProducts(props.selectedCategory);
+     getAllProducts(selectedCategory);
       
-},[props.selectedCategory]);
+},[selectedCategory]);
 
 const getAllSubcategories = async (categoryName) => {
   // Array to store subcategories

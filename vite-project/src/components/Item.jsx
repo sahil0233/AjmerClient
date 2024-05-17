@@ -1,5 +1,5 @@
 import { collection, doc, getDoc, getDocs, query, where, addDoc, arrayUnion, updateDoc, deleteDoc, increment } from 'firebase/firestore';
-import React, { useEffect, useState, Fragment } from 'react'
+import React, { useEffect, useState, Fragment, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { firestore } from '../firebase/FirebaseConfig';
 import { Listbox, Transition } from '@headlessui/react'
@@ -10,17 +10,48 @@ import { cartTotalAtom } from '../store/atoms/totalCartQuantity';
 
 const Item = (props) => {
     const [prices,setPrices] = useState([[]]);
-    const [total, setTotal] = useState(0);
-    const [pricePerPiece, setPricePerPiece] = useState(0);
     const [variations, setVariations] = useState([]);
     const [selectedVariant, setSelectedVariant ] = useState();
     const [quantity, setQuantity] = useState(0);
     const navigate = useNavigate();
     const [cartTotal, setCartTotal] = useRecoilState(cartTotalAtom);
+    
+    const pricePerPiece = useMemo(() => {
+         for(let i=0;i<prices.length;i++){
+            if(quantity>=prices[i][0] && quantity <= prices[i][1]){
+                return prices[i][2];
+                
+            }
+        }
+
+    },[prices, quantity, selectedVariant])
+
+    const total = useMemo(() => {
+         for(let i=0;i<prices.length;i++){
+            if(quantity>=prices[i][0] && quantity <= prices[i][1]){
+                return quantity*prices[i][2]
+            }
+        }
+    },[prices, quantity, selectedVariant])
+
+    const minimumQuantityOfItem = useMemo(() => {
+        let minimumQuantityOfProduct = Number.MAX_SAFE_INTEGER;
+        for(let i=0;i<prices.length;i++){
+            if(prices[i][0]<minimumQuantityOfProduct) minimumQuantityOfProduct = prices[i][0];
+        }
+        return minimumQuantityOfProduct;
+    },[prices, selectedVariant]);
+    const maximumQuantityOfItem = useMemo(() => {
+        let maximumQuantityOfProduct = 0;
+        for(let i=0;i<prices.length;i++){
+            if(prices[i][1]>maximumQuantityOfProduct) maximumQuantityOfProduct = prices[i][1];
+        }
+        return maximumQuantityOfProduct;
+    },[prices, selectedVariant]);
 
     useEffect(() => {
         getVariationData();
-    },[]);
+    },[props.id]);
 
     const getPricesData = async(variationId) => {
         const docRef = collection(firestore, "products", props.id, "variations", variationId, "prices");
@@ -31,13 +62,19 @@ const Item = (props) => {
             if (!pricesArray[i]) {
                 pricesArray[i] = [];
             }
-            console.log(doc.data())
                 pricesArray[i][0] = doc.data().minQuantity;
                 pricesArray[i][1] = doc.data().maxQuantity;
                 pricesArray[i][2] = doc.data().price;
                 i++;
         })
         setPrices(pricesArray);
+        let minimumQuantityOfProduct = Number.MAX_SAFE_INTEGER;
+        let maximumQuantityOfProduct = 0;
+        for(let i=0;i<pricesArray.length;i++){
+            if(pricesArray[i][0]<minimumQuantityOfProduct) minimumQuantityOfProduct = pricesArray[i][0];
+            if(pricesArray[i][1]>maximumQuantityOfProduct) maximumQuantityOfProduct = pricesArray[i][1];
+        }
+        setQuantity(minimumQuantityOfProduct);
     }
     const getVariationData = async() => {
         const docRef = collection(firestore, "products", props.id,"variations");
@@ -61,42 +98,29 @@ const Item = (props) => {
             const docSnap = await getDocs(itemq);
             if(docSnap.docs[0]){
             setQuantity(docSnap.docs[0].data().quantity);}
-            else{
-                setQuantity(0);
-            }
 
 
     }
 
-    const handleFocus = (event) => {
-        // Clear the input if the initial value is 0 when it's focused
-        if (quantity === 0) {
-        event.target.value = '';
-        }
-    };
-
-    const handleBlur = (event) => {
-        // Set the input value to 0 if it's empty when blurred
-        if (event.target.value === '') {
-        setQuantity(0);
-        }
-    };
-
     const increaseQuantity = () => {
-        const newQuantity = quantity+1;
+        const newQuantity = Number(quantity)+1;
+        if(newQuantity> maximumQuantityOfItem){
+            setQuantity(maximumQuantityOfItem);
+        }
+        else{
         setQuantity(newQuantity);
-        for(let i=0;i<prices.length;i++){
-            if(newQuantity>=prices[i][0] && newQuantity <= prices[i][1]){
-                setPricePerPiece(prices[i][2]);
-                setTotal(newQuantity*prices[i][2])
-            }
         }
         
     }
 
     const decreaseQuantity = () => {
-        const newQuantity = quantity-1;
+        const newQuantity = Number(quantity)-1;
+        if(newQuantity< minimumQuantityOfItem){
+            setQuantity(minimumQuantityOfItem)
+        }
+        else {
         setQuantity(newQuantity);
+        }
         for(let i=0;i<prices.length;i++){
             if(newQuantity>=prices[i][0] && newQuantity <= prices[i][1]){
                 setPricePerPiece(prices[i][2]);
@@ -106,18 +130,9 @@ const Item = (props) => {
         
     }
 
-    
-
     const handleQuantityChange = (e) => {
-        const inputValue = e.target.value === '' ? 0 : parseInt(e.target.value,10);
-        setQuantity(inputValue);
-        for(let i=0;i<prices.length;i++){
-            console.log(inputValue)
-            if(inputValue>=prices[i][0] && inputValue <= prices[i][1]){
-                setPricePerPiece(prices[i][2]);
-                setTotal(inputValue*prices[i][2])
-            }
-        }
+        const inputValue = e.target.value;
+            setQuantity(e.target.value);
     }
 
     
@@ -136,6 +151,10 @@ const Item = (props) => {
     };
 
     const addToCart = async() => {
+        if(quantity < minimumQuantityOfItem || quantity > maximumQuantityOfItem){
+            alert(`minimum quantity of this product is ${minimumQuantityOfItem} & minimum quantity of this product is ${maximumQuantityOfItem} `);
+            return;
+        }
         try {
         const cartRef = collection(firestore, 'carts');
         if(localStorage.getItem('userId')){
@@ -306,7 +325,7 @@ const Item = (props) => {
                  <div className='hidden sm:flex mt-2 w-full flex justify-between items-center'>
                     <div className="flex items-center border-gray-100">
                         <button className={`${quantity>0 ? "bg-blue-500 hover:bg-blue-300": "bg-gray-200"} text-white cursor-pointer rounded-l py-1 px-3.5 duration-100 `} disabled={quantity<1?true:false} onClick={decreaseQuantity}> - </button>
-                        <input className="h-8 w-14 border bg-white text-center text-black text-xs outline-none py-2" type='number' value={quantity} onChange={handleQuantityChange} onFocus={handleFocus} onBlur={handleBlur} />
+                        <input className="h-8 w-14 border bg-white text-center text-black text-xs outline-none py-2" type='number' value={quantity} onChange={handleQuantityChange} min= {minimumQuantityOfItem} max = {maximumQuantityOfItem} />
                         <button className={`bg-blue-500 hover:bg-blue-300 h-8 text-white text-xl rounded-r  px-3 duration-100`} onClick={increaseQuantity}> + </button>
                     </div>
                     <h2 className=' text-xs flex flex-col gap-1'><span className='text-gray-500 font-bold'>Rs/pc</span><span className='text-black'>{pricePerPiece}</span></h2>
