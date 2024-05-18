@@ -114,6 +114,7 @@ const Item = (props) => {
     }
 
     const decreaseQuantity = () => {
+        console.log("clicked")
         const newQuantity = Number(quantity)-1;
         if(newQuantity< minimumQuantityOfItem){
             setQuantity(minimumQuantityOfItem)
@@ -121,13 +122,6 @@ const Item = (props) => {
         else {
         setQuantity(newQuantity);
         }
-        for(let i=0;i<prices.length;i++){
-            if(newQuantity>=prices[i][0] && newQuantity <= prices[i][1]){
-                setPricePerPiece(prices[i][2]);
-                setTotal(newQuantity*prices[i][2])
-            }
-        }
-        
     }
 
     const handleQuantityChange = (e) => {
@@ -239,28 +233,6 @@ const Item = (props) => {
 
     }
 
-    const deleteCartItem = async() => {
-        try {
-        const cartRef = collection(firestore, 'carts');
-            const q = query(cartRef, where("userId", "==", localStorage.getItem('userId')));
-            const querySnapshot = await getDocs(q);
-            
-            const currdoc = querySnapshot.docs[0];
-            const itemsCollection = collection(firestore,"carts",currdoc.id,"items");
-            
-            const itemq = query(itemsCollection,where("productId","==",props.id),where("variantId","==",selectedVariant.variationId))
-            const itemDoc = await getDocs(itemq);
-           
-            const docDel = doc(firestore,"carts", currdoc.id, "items", itemDoc.docs[0].id)
-                await deleteDoc(docDel)
-                setCartTotal(cartTotal-quantity);
-                setQuantity(0);
-        }catch(err){
-            console.error(err)
-        }
-
-    }
-
   return (
     
     <div className="w-11/12 p-2 lg:p-4 sm:w-full h-60 sm:h-96 bg-white border-2 shadow-md rounded-xl">
@@ -324,7 +296,7 @@ const Item = (props) => {
                 </Listbox>
                  <div className='hidden sm:flex mt-2 w-full flex justify-between items-center'>
                     <div className="flex items-center border-gray-100">
-                        <button className={`${quantity>0 ? "bg-blue-500 hover:bg-blue-300": "bg-gray-200"} text-white cursor-pointer rounded-l py-1 px-3.5 duration-100 `} disabled={quantity<1?true:false} onClick={decreaseQuantity}> - </button>
+                        <button className={`${quantity>minimumQuantityOfItem ? "bg-blue-500 hover:bg-blue-300": "bg-gray-200"} text-white cursor-pointer rounded-l py-1 px-3.5 duration-100 `} disabled={quantity<=minimumQuantityOfItem?true:false} onClick={decreaseQuantity}> - </button>
                         <input className="h-8 w-14 border bg-white text-center text-black text-xs outline-none py-2" type='number' value={quantity} onChange={handleQuantityChange} min= {minimumQuantityOfItem} max = {maximumQuantityOfItem} />
                         <button className={`bg-blue-500 hover:bg-blue-300 h-8 text-white text-xl rounded-r  px-3 duration-100`} onClick={increaseQuantity}> + </button>
                     </div>
