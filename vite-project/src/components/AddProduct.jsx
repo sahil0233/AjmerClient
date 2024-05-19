@@ -2,7 +2,7 @@ import React, {useState, Fragment, useEffect} from 'react';
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon, PlusCircleIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import {storage, firestore} from "../firebase/FirebaseConfig";
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, getDocs, runTransaction, doc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import Loader from './Loader'
 import { z } from "zod";
@@ -162,26 +162,35 @@ const AddProduct = () => {
                 brand : brand,
                 visible : visible,
             });
-            try{
                 const variationDataArray = variations.map((variation, index) => ({
                 name: variation,
                 quantity: quantity[index],
                 }));
-                console.log(variationDataArray)
 
                 // const validatedVariations = VariationSchema.array().parse(variationDataArray);
-                const docRef = await addDoc(prodRef, validatedProduct);
-                const variationsCollection = collection(firestore, "products",docRef.id,"variations");
-                let x =0;
-                for (const variation of variationDataArray){
-                    const variationdocRef = await addDoc(variationsCollection, variation);
-                    const pricesCollection = collection(firestore, "products", docRef.id, "variations", variationdocRef.id,"prices");
-                    const pricesOfThisVariation = priceRanges[x];
-                    for(let i=0; i<pricesOfThisVariation.length;i++){
-                        await addDoc(pricesCollection,{minQuantity : pricesOfThisVariation[i][0], maxQuantity : pricesOfThisVariation[i][1], price : pricesOfThisVariation[i][2]})
+                await runTransaction(firestore, async (transaction) => {
+                    const docRef = doc(prodRef);
+                    transaction.set(docRef, validatedProduct);
+                    const variationsCollection = collection(firestore, "products",docRef.id,"variations");
+                    let x =0;
+                    for (const variation of variationDataArray){
+                        const variationdocRef = doc(variationsCollection);
+                        transaction.set(variationdocRef, variation);
+
+                        const pricesCollection = collection(firestore, "products", docRef.id, "variations", variationdocRef.id,"prices");
+                        const pricesOfThisVariation = priceRanges[x];
+                        for(let i=0; i<pricesOfThisVariation.length;i++){
+                            const priceData = {
+                                minQuantity : pricesOfThisVariation[i][0],
+                                maxQuantity : pricesOfThisVariation[i][1],
+                                price : pricesOfThisVariation[i][2]
+                            }
+                            const priceDocRef = doc(pricesCollection);
+                            transaction.set(priceDocRef, priceData);
+                        }
+                        x++;
                     }
-                    x++;
-                }
+                })
                 setLoading(false);
                 alert("Product added");
                 setTitle("");
@@ -198,11 +207,7 @@ const AddProduct = () => {
                 setImage([]);
                 setImagePreview([]);
                 
-            }catch(variationError){
-                console.log(variationError)
-                alert("Variation data is invalid", variationError.message);
-                setLoading(false)
-            }
+            
 
         }catch(prodError){
             console.log(prodError)
