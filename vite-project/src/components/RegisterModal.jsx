@@ -31,29 +31,43 @@ const RegisterModal = (props) => {
     const [otp,setOtp] = useState("");
     const [showOtpInput, setShowOtpInput] = useState(false);
     const navigate = useNavigate();
-     const auth = getAuth();
 
-    const setUpRecaptcha = () => {
-        if(!window.recaptchaVerifier){
-      window.recaptchaVerifier = new RecaptchaVerifier(auth,
-        "recaptcha-container",
-        {
-          size: "invisible",
+    
+    
+    useEffect(() => {
+        
+        const auth = getAuth();
+        try{
+        window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+        'size': 'invisible',
+        'callback': (response) => {
+            // reCAPTCHA solved, allow signInWithPhoneNumber.
+            console.log("recaptcha solved")
+            // sendOtp();
         }
-      );
-    }
+        });
+        }catch(e){
+            console.log(e);
+        }
+        
 
-        window.recaptchaVerifier.verify();
-    };
+        return () => {
+            window.recaptchaVerifier.clear();
+        }
+    }, [auth])
+
+     
 
     const isPhoneNumberValid = formData.phonenumber.length >= 10;
 
     const sendOtp = async() => {
-        setUpRecaptcha()
+        if(formData.phonenumber.length !== 10){
+            alert("Phone Number not valid");
+            return;
+        }
         const appVerifier = await window.recaptchaVerifier;
+        
         try {
-            if(formData.phonenumber.length !== 10)alert("Please enter a valid Phone number");
-            else {
             setLoading(true);
             // const recaptcha = new RecaptchaVerifier(auth,"recaptcha",{});
             // setLoading(false);
@@ -62,12 +76,12 @@ const RegisterModal = (props) => {
             setShowOtpInput(true);
             setLoading(false);
             }
-        } catch(e) {
+         catch(e) {
             setLoading(false);
             console.log(e);
             window.recaptchaVerifier.recaptcha.reset();
             window.recaptchaVerifier.clear();
-            alert("Please write your phone number without spaces. Eg. 999xxxxxxx")
+            alert("Error while signing In")
         }
     }
 
@@ -117,21 +131,6 @@ const RegisterModal = (props) => {
         setOtp("");
 
     }
-
-    // const resendOTP = async() => {
-    //     setUpRecaptcha()
-    //     const appVerifier = await window.recaptchaVerifier;
-    //     try{
-    //         const confirmation = await signInWithPhoneNumber(auth, "+91"+formData.phonenumber, appVerifier)
-    //         setUser (confirmation);
-    //         setShowOtpInput(true);
-    //         setLoading(false);
-    //     } catch(e) {
-    //         setLoading(false);
-    //         console.log(e);
-    //         alert("Something went wrong! Contact administrator if situation persists")
-    //     }
-    //     }
     
         const handleChange = (e) => {
         const { name, value } = e.target;
@@ -226,7 +225,7 @@ const RegisterModal = (props) => {
                     </div>
                     <h2 className='text-gray-400'>By continuing, you agree to our Terms, Refunds and Privacy Policy</h2>
                     
-                    <Button color='warning' className='max-w-md w-full' disabled={!isPhoneNumberValid} onClick={sendOtp}>CONTINUE</Button>
+                    <Button id='sign-in-button' color='warning' className='max-w-md w-full' disabled={!isPhoneNumberValid} onClick={sendOtp}>CONTINUE</Button>
                     </div>
                     </Tab.Panel>
                     <Tab.Panel>
